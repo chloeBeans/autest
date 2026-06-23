@@ -29,6 +29,15 @@ assigned to a sprint. **Dates are placeholders — adjust to your real calendar.
 | R12 | Track requirements by sprint with due dates + completed dates | ✅ Done | Sprint 1 | 2026-06-23 |
 | R13 | Mock backend behind a switchable `src/api` seam | ✅ Done | Sprint 1 | 2026-06-23 |
 | R14 | Per-module requirement docs | ✅ Done | Sprint 1 | 2026-06-23 |
+| R22 | Login + roles (mock, seeded users) | ✅ Done | Sprint 1 | 2026-06-24 |
+| R23 | Multi-project + per-project scoping | ✅ Done | Sprint 1 | 2026-06-24 |
+| R24 | Admin manages projects, users, and membership | ✅ Done | Sprint 1 | 2026-06-24 |
+| R25 | Users see only assigned projects | ✅ Done | Sprint 1 | 2026-06-24 |
+| R26 | Bugs: add manually + pick-up (who took the bug) | ✅ Done | Sprint 1 | 2026-06-24 |
+| R27 | Merge import into the Bugs menu | ✅ Done | Sprint 1 | 2026-06-24 |
+| R28 | Unified Tests menu (record / drag-drop / code) | ✅ Done | Sprint 1 | 2026-06-24 |
+| R29 | Portal folders in Settings (linked from dashboard) | ✅ Done | Sprint 1 | 2026-06-24 |
+| R30 | Shared git rule (committed CLAUDE.md + .claude/settings.json hook) | ✅ Done | Sprint 1 | 2026-06-24 |
 | R15 | Real backend: execute `npx playwright test`, stream results | 🔜 Planned | Sprint 2 | — |
 | R16 | Real git commit of confident fixes | 🔜 Planned | Sprint 2 | — |
 | R17 | Persist folder handles across reloads (IndexedDB) | 🔜 Planned | Sprint 2 | — |

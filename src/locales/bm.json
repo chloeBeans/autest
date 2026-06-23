@@ -5,12 +5,37 @@
   },
   "nav": {
     "dashboard": "Papan Pemuka",
-    "import": "Import Senarai Pepijat",
-    "bugs": "Senarai Pepijat",
-    "folders": "Folder Portal",
-    "record": "Rakam Ujian",
-    "addTest": "Tambah Ujian",
-    "brs": "BRS"
+    "bugs": "Pepijat",
+    "tests": "Ujian",
+    "brs": "BRS",
+    "settings": "Tetapan",
+    "import": "Import"
+  },
+  "auth": {
+    "signIn": "Log masuk",
+    "username": "Nama pengguna",
+    "password": "Kata laluan"
+  },
+  "settings": {
+    "title": "Tetapan",
+    "preferences": "Keutamaan",
+    "language": "Bahasa",
+    "backend": "Pelayan",
+    "projects": "Projek (admin)",
+    "project": "Projek",
+    "members": "Ahli",
+    "newProject": "Nama projek baharu",
+    "users": "Pengguna (admin)",
+    "membership": "Keahlian projek (admin)",
+    "addMember": "Tambah ahli",
+    "assign": "Tetapkan"
+  },
+  "tests": {
+    "title": "Ujian",
+    "subtitle": "Rakam, bina secara seret & lepas, atau tulis kod",
+    "record": "Rakam",
+    "build": "Bina (seret & lepas)",
+    "code": "Kod"
   },
   "record": {
     "title": "Rakam Ujian",
@@ -40,10 +65,11 @@
     "download": "Muat turun"
   },
   "dashboard": {
+    "hello": "Helo",
     "gettingStarted": "Untuk bermula",
-    "step1": "Import senarai pepijat (CSV / XLSX)",
-    "step2": "Sambung folder portal Luaran dan Dalaman",
-    "step3": "Jana ujian Playwright daripada penerangan pepijat",
+    "step1": "Import atau tambah senarai pepijat",
+    "step2": "Sambung folder portal dalam Tetapan",
+    "step3": "Rakam atau bina ujian Playwright",
     "step4": "Muat naik BRS dan jejak keperluan mengikut sprint"
   },
   "import": {
@@ -68,10 +94,13 @@
     "status": "Status",
     "confidence": "Keyakinan",
     "notes": "Nota / Keraguan",
+    "pickedUpBy": "Diambil oleh",
     "actions": "Tindakan",
     "analyze": "Analisa & jana",
     "copyPrompt": "Salin gesaan",
-    "generateTest": "Jana ujian"
+    "generateTest": "Jana ujian",
+    "addBug": "Tambah pepijat",
+    "pickUp": "Ambil"
   },
   "folders": {
     "title": "Folder Portal",

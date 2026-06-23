@@ -1,36 +1,47 @@
 import { defineStore } from 'pinia';
-import { PORTALS } from '@/utils/constants';
+import { useProjectStore } from './projects';
 
 /**
- * Holds the live FileSystemDirectoryHandle for each portal.
+ * Holds the live FileSystemDirectoryHandle for each portal, per project.
  *
- * Handles are NOT serializable, so they are kept in memory only (not persisted).
- * After a page reload the user reconnects the folders — we keep the last folder
- * NAME persisted purely for display.
+ * Handles are NOT serializable, so they (and the displayed folder names) are kept
+ * in memory only — after a reload the user reconnects. Scoped by project so each
+ * project points at its own External/Internal folders.
  */
 export const useFolderStore = defineStore('folders', {
   state: () => ({
-    handles: {
-      [PORTALS.EXTERNAL]: null,
-      [PORTALS.INTERNAL]: null,
-    },
-    names: {
-      [PORTALS.EXTERNAL]: localStorage.getItem('folder-name-external') || '',
-      [PORTALS.INTERNAL]: localStorage.getItem('folder-name-internal') || '',
-    },
+    handlesByProject: {}, // { [projectId]: { external: handle, internal: handle } }
+    namesByProject: {}, // { [projectId]: { external: name, internal: name } }
   }),
   getters: {
-    isConnected: state => portal => !!state.handles[portal],
-    handleFor: state => portal => state.handles[portal],
+    pid() {
+      return useProjectStore().currentProjectId;
+    },
+    handles(state) {
+      return state.handlesByProject[this.pid] || {};
+    },
+    names(state) {
+      return state.namesByProject[this.pid] || {};
+    },
+    isConnected(state) {
+      return portal => !!state.handlesByProject[this.pid]?.[portal];
+    },
+    handleFor(state) {
+      return portal => state.handlesByProject[this.pid]?.[portal] || null;
+    },
   },
   actions: {
     setHandle(portal, handle) {
-      this.handles[portal] = handle;
-      this.names[portal] = handle?.name || '';
-      localStorage.setItem(`folder-name-${portal}`, this.names[portal]);
+      const pid = this.pid;
+      if (!pid) return;
+      if (!this.handlesByProject[pid]) this.handlesByProject[pid] = {};
+      if (!this.namesByProject[pid]) this.namesByProject[pid] = {};
+      this.handlesByProject[pid][portal] = handle;
+      this.namesByProject[pid][portal] = handle?.name || '';
     },
     disconnect(portal) {
-      this.handles[portal] = null;
+      const pid = this.pid;
+      if (this.handlesByProject[pid]) this.handlesByProject[pid][portal] = null;
     },
   },
 });

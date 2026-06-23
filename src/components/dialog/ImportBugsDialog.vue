@@ -1,11 +1,14 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { parseSpreadsheet, detectColumn, rowsToBugs } from '@/utils/spreadsheet';
 import { useBugStore } from '@/store/bugs';
 import { useToastStore } from '@/store/toast';
 
-const router = useRouter();
+const props = defineProps({
+  modelValue: { type: Boolean, default: false },
+});
+const emit = defineEmits(['update:modelValue']);
+
 const bugStore = useBugStore();
 const toast = useToastStore();
 
@@ -28,8 +31,12 @@ const allColumns = computed(() => {
 
 const previewBugs = computed(() => {
   if (!mapping.value.descCol) return [];
-  return rowsToBugs(sheets.value, mapping.value).slice(0, 8);
+  return rowsToBugs(sheets.value, mapping.value).slice(0, 6);
 });
+
+function close() {
+  emit('update:modelValue', false);
+}
 
 async function onFile(files) {
   const f = Array.isArray(files) ? files[0] : files;
@@ -61,15 +68,22 @@ function load() {
   }
   bugStore.setBugs(bugs, fileName.value);
   toast.success($t('import.loaded', { count: bugs.length }));
-  router.push('/bugs');
+  close();
 }
 </script>
 
 <template>
-  <div>
-    <PageHeader :title="$t('import.title')" icon="mdi-upload-outline" />
+  <v-dialog
+    :model-value="modelValue"
+    max-width="760"
+    @update:model-value="emit('update:modelValue', $event)"
+  >
+    <v-card rounded="lg">
+      <v-card-title class="d-flex align-center justify-space-between">
+        <span class="text-subtitle-1 font-weight-bold">{{ $t('import.title') }}</span>
+        <v-btn variant="text" icon="mdi-close" @click="close" />
+      </v-card-title>
 
-    <v-card rounded="lg" border flat class="mb-4">
       <v-card-text>
         <v-file-input
           v-model="file"
@@ -81,17 +95,11 @@ function load() {
           show-size
           @update:model-value="onFile"
         />
-      </v-card-text>
-    </v-card>
 
-    <template v-if="sheets.length">
-      <v-card rounded="lg" border flat class="mb-4">
-        <v-card-title class="text-subtitle-1 font-weight-bold">{{
-          $t('import.mapping')
-        }}</v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="4">
+        <template v-if="sheets.length">
+          <div class="text-subtitle-2 font-weight-bold mt-2 mb-1">{{ $t('import.mapping') }}</div>
+          <v-row dense>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="mapping.idCol"
                 :items="allColumns"
@@ -99,14 +107,14 @@ function load() {
                 clearable
               />
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-select
                 v-model="mapping.descCol"
                 :items="allColumns"
                 :label="$t('import.descriptionColumn')"
               />
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-select
                 v-model="mapping.portalCol"
                 :items="allColumns"
@@ -115,7 +123,7 @@ function load() {
                 clearable
               />
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-select
                 v-model="mapping.envCol"
                 :items="allColumns"
@@ -129,53 +137,40 @@ function load() {
             :label="$t('import.useSheetName')"
             density="compact"
             hide-details
-            class="mt-2"
           />
-          <div class="text-caption text-medium-emphasis mt-1">
-            Sheets: {{ sheets.map(s => `${s.name} (${s.rows.length})`).join(', ') }}
-          </div>
-        </v-card-text>
-      </v-card>
 
-      <v-card v-if="previewBugs.length" rounded="lg" border flat class="mb-4">
-        <v-card-title class="text-subtitle-1 font-weight-bold">{{
-          $t('import.preview')
-        }}</v-card-title>
-        <v-table density="comfortable">
-          <thead>
-            <tr>
-              <th>{{ $t('bugs.id') }}</th>
-              <th>{{ $t('bugs.portal') }}</th>
-              <th>Env</th>
-              <th>{{ $t('bugs.description') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="b in previewBugs" :key="b.id">
-              <td class="mono">{{ b.id }}</td>
-              <td>
-                <v-chip size="x-small" :color="b.portal === 'external' ? 'info' : 'secondary'">
-                  {{ b.portal }}
-                </v-chip>
-              </td>
-              <td>
-                <v-chip size="x-small" variant="outlined">{{ b.env.toUpperCase() }}</v-chip>
-              </td>
-              <td class="text-truncate" style="max-width: 420px">{{ b.description }}</td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
+          <v-table v-if="previewBugs.length" density="compact" class="mt-2">
+            <thead>
+              <tr>
+                <th>{{ $t('bugs.id') }}</th>
+                <th>{{ $t('bugs.portal') }}</th>
+                <th>Env</th>
+                <th>{{ $t('bugs.description') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="b in previewBugs" :key="b.id">
+                <td class="mono">{{ b.id }}</td>
+                <td>{{ b.portal }}</td>
+                <td>{{ b.env.toUpperCase() }}</td>
+                <td class="text-truncate" style="max-width: 280px">{{ b.description }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </template>
+      </v-card-text>
 
-      <v-btn
-        color="primary"
-        size="large"
-        :disabled="!mapping.descCol"
-        prepend-icon="mdi-database-import-outline"
-        @click="load"
-      >
-        {{ $t('import.load') }}
-      </v-btn>
-    </template>
-  </div>
+      <v-card-actions class="px-4 pb-4">
+        <v-spacer />
+        <FormButton variant="line-secondary" @click="close">{{ $t('general.cancel') }}</FormButton>
+        <FormButton
+          :disabled="!mapping.descCol"
+          prependIcon="mdi-database-import-outline"
+          @click="load"
+        >
+          {{ $t('import.load') }}
+        </FormButton>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

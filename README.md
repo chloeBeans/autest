@@ -20,17 +20,22 @@ npm run format
 
 > Folder writing uses the **File System Access API** — use **Chrome or Edge**.
 
+## Accounts & projects
+
+Log in (mock, seeded users) — everything is scoped to the **project** you select
+in the topbar. Admins manage projects, users, and membership in **Settings**.
+
+Demo logins: `admin/admin` (admin), `qa1/qa1`, `qa2/qa2`, `dev1/dev1`.
+
 ## What it does
 
-| Module | What it does |
+| Menu | What it does |
 | --- | --- |
-| **Import** | Upload a CSV/XLSX bug list, auto-map columns, list bugs. |
-| **Bug List** | Bugs split by portal (External/Internal) **and** environment (DEV/SIT/UAT), with Confidence and Notes/Doubts columns. |
-| **Folders** | Connect the real External/Internal project folders from your PC. |
-| **Generate Test** | Analyze a bug, draft a Playwright spec, save it into the folder; confident fixes auto-commit (mock), uncertain ones write a note. |
-| **Record** | Record real tester interactions into a Playwright test (codegen command + in-browser recorder). |
-| **Add Test** | Build a Playwright test from steps in the UI. |
+| **Dashboard** | Overview, per-project status, getting-started links. |
+| **Bugs** | Import CSV/XLSX **or** add manually; split by portal (External/Internal) **and** environment (DEV/SIT/UAT); **pick up** bugs (who took it); Confidence + Notes/Doubts; generate a Playwright test (confident → commit [mock], doubt → note). |
+| **Tests** | One place to author tests: **Record** (codegen + bookmarklet), **Build** (drag & drop steps), or **Code** — saved into the connected folder. |
 | **BRS** | Upload + view a BRS, auto-list requirements, track by sprint with due dates and completed dates. |
+| **Settings** | Connect per-project External/Internal folders; language; **admin**: projects, users, membership. |
 
 ## Architecture (real vs mock)
 

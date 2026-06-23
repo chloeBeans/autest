@@ -2,17 +2,25 @@
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useBugStore } from '@/store/bugs';
+import { useAuthStore } from '@/store/auth';
+import { useToastStore } from '@/store/toast';
 import GenerateTestDialog from '@/components/dialog/GenerateTestDialog.vue';
+import ImportBugsDialog from '@/components/dialog/ImportBugsDialog.vue';
+import AddBugDialog from '@/components/dialog/AddBugDialog.vue';
 import { BUG_STATUS, CONFIDENCE } from '@/utils/constants';
 
 const bugStore = useBugStore();
+const auth = useAuthStore();
+const toast = useToastStore();
 const { counts, envCounts } = storeToRefs(bugStore);
 
 const portalTab = ref('all');
 const envTab = ref('all');
 const search = ref('');
 
-const dialog = ref(false);
+const genDialog = ref(false);
+const importDialog = ref(false);
+const addDialog = ref(false);
 const activeBug = ref(null);
 
 const portalTabs = computed(() => [
@@ -66,11 +74,11 @@ const statusLabel = status =>
   })[status] || status;
 
 const columns = computed(() => [
-  { key: 'id', title: $t('bugs.id'), minWidth: '110px' },
+  { key: 'id', title: $t('bugs.id'), minWidth: '100px' },
   {
     key: 'portal',
     title: $t('bugs.portal'),
-    minWidth: '110px',
+    minWidth: '100px',
     badge: true,
     badgeEval: val => (val === 'external' ? 'blue' : 'purple'),
     formatter: val => (val === 'external' ? $t('general.external') : $t('general.internal')),
@@ -78,12 +86,12 @@ const columns = computed(() => [
   {
     key: 'env',
     title: 'Env',
-    minWidth: '80px',
+    minWidth: '70px',
     badge: true,
     badgeEval: () => 'grey',
     formatter: val => String(val).toUpperCase(),
   },
-  { key: 'description', title: $t('bugs.description'), minWidth: '320px' },
+  { key: 'description', title: $t('bugs.description'), minWidth: '300px' },
   {
     key: 'status',
     title: $t('bugs.status'),
@@ -95,18 +103,24 @@ const columns = computed(() => [
   {
     key: 'confidence',
     title: $t('bugs.confidence'),
-    minWidth: '110px',
+    minWidth: '100px',
     badge: true,
     badgeEval: val =>
       val === CONFIDENCE.HIGH ? 'green' : val === CONFIDENCE.LOW ? 'yellow' : 'grey',
     formatter: val => (val === CONFIDENCE.UNKNOWN ? '-' : val),
   },
-  { key: 'note', title: $t('bugs.notes'), minWidth: '200px' },
+  { key: 'pickedUpBy', title: $t('bugs.pickedUpBy'), minWidth: '120px' },
+  { key: 'note', title: $t('bugs.notes'), minWidth: '180px' },
 ]);
 
-function openDialog(bug) {
+function openGenerate(bug) {
   activeBug.value = bug;
-  dialog.value = true;
+  genDialog.value = true;
+}
+
+function pickUp(bug) {
+  bugStore.pickUp(bug.key, auth.username);
+  toast.success(`${bug.id} picked up by ${auth.username}`);
 }
 </script>
 
@@ -117,9 +131,12 @@ function openDialog(bug) {
         <FormButton
           variant="line-secondary"
           prependIcon="mdi-upload-outline"
-          @click="$router.push('/import')"
+          @click="importDialog = true"
         >
           {{ $t('nav.import') }}
+        </FormButton>
+        <FormButton prependIcon="mdi-plus" @click="addDialog = true">
+          {{ $t('bugs.addBug') }}
         </FormButton>
       </template>
     </PageHeader>
@@ -128,9 +145,14 @@ function openDialog(bug) {
       <div class="text-center py-8 text-medium-emphasis">
         <v-icon icon="mdi-bug-outline" size="48" class="mb-2" />
         <div>{{ $t('bugs.empty') }}</div>
-        <FormButton class="mt-4" prependIcon="mdi-upload-outline" @click="$router.push('/import')">
-          {{ $t('nav.import') }}
-        </FormButton>
+        <div class="d-flex justify-center ga-2 mt-4">
+          <FormButton prependIcon="mdi-upload-outline" @click="importDialog = true">
+            {{ $t('nav.import') }}
+          </FormButton>
+          <FormButton variant="line-primary" prependIcon="mdi-plus" @click="addDialog = true">
+            {{ $t('bugs.addBug') }}
+          </FormButton>
+        </div>
       </div>
     </Card>
 
@@ -152,25 +174,42 @@ function openDialog(bug) {
 
       <DataTable :columns="columns" :data="rows" :empty-text="$t('bugs.empty')">
         <template #cell-description="{ value }">
-          <div class="text-truncate" style="max-width: 360px" :title="value">{{ value }}</div>
+          <div class="text-truncate" style="max-width: 340px" :title="value">{{ value }}</div>
+        </template>
+        <template #cell-pickedUpBy="{ value }">
+          <Badge v-if="value" variant="blue">{{ value }}</Badge>
+          <span v-else class="text-medium-emphasis">-</span>
         </template>
         <template #cell-note="{ value }">
           <span v-if="value" class="text-warning text-caption">{{ value }}</span>
           <span v-else class="text-medium-emphasis">-</span>
         </template>
         <template #actions="{ row }">
-          <FormButton
-            size="md"
-            variant="line-primary"
-            prependIcon="mdi-flask-outline"
-            @click="openDialog(row)"
-          >
-            {{ $t('bugs.generateTest') }}
-          </FormButton>
+          <div class="d-flex ga-1 justify-end">
+            <FormButton
+              v-if="!row.pickedUpBy"
+              size="md"
+              variant="line-secondary"
+              prependIcon="mdi-hand-back-right-outline"
+              @click="pickUp(row)"
+            >
+              {{ $t('bugs.pickUp') }}
+            </FormButton>
+            <FormButton
+              size="md"
+              variant="line-primary"
+              prependIcon="mdi-flask-outline"
+              @click="openGenerate(row)"
+            >
+              {{ $t('bugs.generateTest') }}
+            </FormButton>
+          </div>
         </template>
       </DataTable>
     </Card>
 
-    <GenerateTestDialog v-model="dialog" :bug="activeBug" />
+    <GenerateTestDialog v-model="genDialog" :bug="activeBug" />
+    <ImportBugsDialog v-model="importDialog" />
+    <AddBugDialog v-model="addDialog" />
   </div>
 </template>

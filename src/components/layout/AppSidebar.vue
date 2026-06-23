@@ -9,12 +9,10 @@ const bugStore = useBugStore();
 
 const items = [
   { to: '/', icon: 'mdi-view-dashboard-outline', key: 'dashboard' },
-  { to: '/import', icon: 'mdi-upload-outline', key: 'import' },
   { to: '/bugs', icon: 'mdi-bug-outline', key: 'bugs' },
-  { to: '/folders', icon: 'mdi-folder-cog-outline', key: 'folders' },
-  { to: '/record', icon: 'mdi-record-circle-outline', key: 'record' },
-  { to: '/add-test', icon: 'mdi-flask-outline', key: 'addTest' },
+  { to: '/tests', icon: 'mdi-flask-outline', key: 'tests' },
   { to: '/brs', icon: 'mdi-file-document-outline', key: 'brs' },
+  { to: '/settings', icon: 'mdi-cog-outline', key: 'settings' },
 ];
 </script>
 

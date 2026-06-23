@@ -43,8 +43,20 @@ When a bug is analyzed:
   **Notes / Doubts** column and status becomes `Needs review`, so a human can
   look before anything lands.
 
+## Accounts, roles, and projects (mock for now)
+
+Login, users, and projects live in persisted Pinia stores (`auth`, `users`,
+`projects`) as the mock data layer — seeded on first run. Roles (`admin`/`user`)
+gate admin features. A real backend would sit behind the same store actions
+(`login`, `addUser`, `addProject`, `assignUser`).
+
+Every feature is **scoped per project**: the `bugs`, `brs`, and `folders` stores
+keep a `byProject` map keyed by `projects.currentProjectId`, so switching project
+swaps the active data while preserving each project's state.
+
 ## Data model note (backend-ready)
 
 Bugs carry both `portal` (external/internal) and `env` (dev/sit/uat) so they can
-be listed together or separated on either axis. Records keep their original
-`raw` row, so a future backend can persist and re-sync without losing columns.
+be listed together or separated on either axis, plus `pickedUpBy` (assignee).
+Records keep their original `raw` row, so a future backend can persist and
+re-sync without losing columns.

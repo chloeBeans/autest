@@ -5,12 +5,37 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "import": "Import Bug List",
-    "bugs": "Bug List",
-    "folders": "Portal Folders",
-    "record": "Record Test",
-    "addTest": "Add Test",
-    "brs": "BRS"
+    "bugs": "Bugs",
+    "tests": "Tests",
+    "brs": "BRS",
+    "settings": "Settings",
+    "import": "Import"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "username": "Username",
+    "password": "Password"
+  },
+  "settings": {
+    "title": "Settings",
+    "preferences": "Preferences",
+    "language": "Language",
+    "backend": "Backend",
+    "projects": "Projects (admin)",
+    "project": "Project",
+    "members": "Members",
+    "newProject": "New project name",
+    "users": "Users (admin)",
+    "membership": "Project membership (admin)",
+    "addMember": "Add member",
+    "assign": "Assign"
+  },
+  "tests": {
+    "title": "Tests",
+    "subtitle": "Record, build with drag & drop, or write code",
+    "record": "Record",
+    "build": "Build (drag & drop)",
+    "code": "Code"
   },
   "record": {
     "title": "Record Test",
@@ -40,10 +65,11 @@
     "download": "Download"
   },
   "dashboard": {
+    "hello": "Hello",
     "gettingStarted": "Getting started",
-    "step1": "Import your bug list (CSV / XLSX)",
-    "step2": "Connect the External and Internal portal folders",
-    "step3": "Generate Playwright tests from bug descriptions",
+    "step1": "Import or add your bug list",
+    "step2": "Connect portal folders in Settings",
+    "step3": "Record or build Playwright tests",
     "step4": "Upload a BRS and track requirements by sprint"
   },
   "import": {
@@ -68,10 +94,13 @@
     "status": "Status",
     "confidence": "Confidence",
     "notes": "Notes / Doubts",
+    "pickedUpBy": "Picked up by",
     "actions": "Actions",
     "analyze": "Analyze & generate",
     "copyPrompt": "Copy prompt",
-    "generateTest": "Generate test"
+    "generateTest": "Generate test",
+    "addBug": "Add bug",
+    "pickUp": "Pick up"
   },
   "folders": {
     "title": "Portal Folders",

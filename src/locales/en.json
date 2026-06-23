@@ -1,0 +1,106 @@
+{
+  "app": {
+    "name": "Autest",
+    "tagline": "Bug & Test Automation Portal"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "import": "Import Bug List",
+    "bugs": "Bug List",
+    "folders": "Portal Folders",
+    "record": "Record Test",
+    "addTest": "Add Test",
+    "brs": "BRS"
+  },
+  "record": {
+    "title": "Record Test",
+    "subtitle": "Let testers record real interactions instead of writing tests by hand",
+    "codegenTitle": "Option 1 — Playwright Codegen (recommended)",
+    "codegenDesc": "Opens a real browser and writes every click/type into a spec automatically.",
+    "snippetTitle": "Option 2 — In-browser recorder (no terminal)",
+    "snippetDesc": "Drag the bookmarklet to your bookmarks bar (or paste the snippet in the app console), then click around — steps build live and copy out as a Playwright test.",
+    "bookmarklet": "Autest Recorder",
+    "copyCommand": "Copy command",
+    "copySnippet": "Copy snippet",
+    "targetUrl": "Target app URL",
+    "testName": "Test name"
+  },
+  "general": {
+    "external": "External",
+    "internal": "Internal",
+    "all": "All",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied to clipboard",
+    "search": "Search",
+    "remove": "Remove",
+    "open": "Open",
+    "download": "Download"
+  },
+  "dashboard": {
+    "gettingStarted": "Getting started",
+    "step1": "Import your bug list (CSV / XLSX)",
+    "step2": "Connect the External and Internal portal folders",
+    "step3": "Generate Playwright tests from bug descriptions",
+    "step4": "Upload a BRS and track requirements by sprint"
+  },
+  "import": {
+    "title": "Import Bug List",
+    "drop": "Drop a CSV or XLSX file here, or click to browse",
+    "mapping": "Column mapping",
+    "portalColumn": "Portal column",
+    "descriptionColumn": "Issue Description column",
+    "idColumn": "Bug ID column",
+    "useSheetName": "Use sheet/tab name as portal",
+    "preview": "Preview",
+    "load": "Load bugs",
+    "loaded": "Loaded {count} bugs",
+    "noData": "No rows found in this file"
+  },
+  "bugs": {
+    "title": "Bug List",
+    "empty": "No bugs imported yet",
+    "id": "ID",
+    "portal": "Portal",
+    "description": "Issue Description",
+    "status": "Status",
+    "confidence": "Confidence",
+    "notes": "Notes / Doubts",
+    "actions": "Actions",
+    "analyze": "Analyze & generate",
+    "copyPrompt": "Copy prompt",
+    "generateTest": "Generate test"
+  },
+  "folders": {
+    "title": "Portal Folders",
+    "unsupported": "Your browser cannot write files to local folders. Use Chrome or Edge for the full workflow.",
+    "connect": "Connect folder",
+    "reconnect": "Reconnect",
+    "connected": "Connected",
+    "notConnected": "Not connected",
+    "info": "Folders you connect are the real folders on your disk — you can keep editing them in your code editor."
+  },
+  "addTest": {
+    "title": "Add Test",
+    "name": "Test name",
+    "baseUrl": "Base URL",
+    "steps": "Steps",
+    "addStep": "Add step",
+    "preview": "Generated spec"
+  },
+  "brs": {
+    "title": "BRS",
+    "upload": "Upload BRS",
+    "viewer": "Document",
+    "tracker": "Requirement tracker",
+    "addItem": "Add requirement",
+    "requirement": "Requirement",
+    "sprint": "Sprint",
+    "reqStatus": "Status",
+    "notStarted": "Not started",
+    "inProgress": "In progress",
+    "done": "Done"
+  }
+}

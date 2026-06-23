@@ -1,0 +1,106 @@
+{
+  "app": {
+    "name": "Autest",
+    "tagline": "Portal Automasi Pepijat & Ujian"
+  },
+  "nav": {
+    "dashboard": "Papan Pemuka",
+    "import": "Import Senarai Pepijat",
+    "bugs": "Senarai Pepijat",
+    "folders": "Folder Portal",
+    "record": "Rakam Ujian",
+    "addTest": "Tambah Ujian",
+    "brs": "BRS"
+  },
+  "record": {
+    "title": "Rakam Ujian",
+    "subtitle": "Benarkan penguji merakam interaksi sebenar tanpa menulis ujian secara manual",
+    "codegenTitle": "Pilihan 1 — Playwright Codegen (disyorkan)",
+    "codegenDesc": "Membuka pelayar sebenar dan menulis setiap klik/taip ke dalam spec secara automatik.",
+    "snippetTitle": "Pilihan 2 — Perakam dalam pelayar (tanpa terminal)",
+    "snippetDesc": "Seret bookmarklet ke bar penanda buku (atau tampal snippet dalam konsol aplikasi), kemudian klik — langkah dibina secara langsung dan disalin sebagai ujian Playwright.",
+    "bookmarklet": "Perakam Autest",
+    "copyCommand": "Salin arahan",
+    "copySnippet": "Salin snippet",
+    "targetUrl": "URL aplikasi sasaran",
+    "testName": "Nama ujian"
+  },
+  "general": {
+    "external": "Luaran",
+    "internal": "Dalaman",
+    "all": "Semua",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "close": "Tutup",
+    "copy": "Salin",
+    "copied": "Disalin ke papan keratan",
+    "search": "Cari",
+    "remove": "Buang",
+    "open": "Buka",
+    "download": "Muat turun"
+  },
+  "dashboard": {
+    "gettingStarted": "Untuk bermula",
+    "step1": "Import senarai pepijat (CSV / XLSX)",
+    "step2": "Sambung folder portal Luaran dan Dalaman",
+    "step3": "Jana ujian Playwright daripada penerangan pepijat",
+    "step4": "Muat naik BRS dan jejak keperluan mengikut sprint"
+  },
+  "import": {
+    "title": "Import Senarai Pepijat",
+    "drop": "Lepaskan fail CSV atau XLSX di sini, atau klik untuk pilih",
+    "mapping": "Pemetaan lajur",
+    "portalColumn": "Lajur portal",
+    "descriptionColumn": "Lajur Penerangan Isu",
+    "idColumn": "Lajur ID Pepijat",
+    "useSheetName": "Guna nama helaian sebagai portal",
+    "preview": "Pratonton",
+    "load": "Muat pepijat",
+    "loaded": "{count} pepijat dimuatkan",
+    "noData": "Tiada baris ditemui dalam fail ini"
+  },
+  "bugs": {
+    "title": "Senarai Pepijat",
+    "empty": "Tiada pepijat diimport lagi",
+    "id": "ID",
+    "portal": "Portal",
+    "description": "Penerangan Isu",
+    "status": "Status",
+    "confidence": "Keyakinan",
+    "notes": "Nota / Keraguan",
+    "actions": "Tindakan",
+    "analyze": "Analisa & jana",
+    "copyPrompt": "Salin gesaan",
+    "generateTest": "Jana ujian"
+  },
+  "folders": {
+    "title": "Folder Portal",
+    "unsupported": "Pelayar anda tidak boleh menulis fail ke folder tempatan. Gunakan Chrome atau Edge.",
+    "connect": "Sambung folder",
+    "reconnect": "Sambung semula",
+    "connected": "Disambung",
+    "notConnected": "Tidak disambung",
+    "info": "Folder yang disambung ialah folder sebenar pada cakera anda — anda masih boleh menyuntingnya dalam editor kod."
+  },
+  "addTest": {
+    "title": "Tambah Ujian",
+    "name": "Nama ujian",
+    "baseUrl": "URL Asas",
+    "steps": "Langkah",
+    "addStep": "Tambah langkah",
+    "preview": "Spec dijana"
+  },
+  "brs": {
+    "title": "BRS",
+    "upload": "Muat naik BRS",
+    "viewer": "Dokumen",
+    "tracker": "Penjejak keperluan",
+    "addItem": "Tambah keperluan",
+    "requirement": "Keperluan",
+    "sprint": "Sprint",
+    "reqStatus": "Status",
+    "notStarted": "Belum mula",
+    "inProgress": "Sedang berjalan",
+    "done": "Selesai"
+  }
+}

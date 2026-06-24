@@ -172,7 +172,7 @@ watch(
 
 <template>
   <BasicLayout @clear-preferences-and-logout="handleLogout">
-    <template #header-right-1>
+    <template #sidebar-top>
       <ProjectSwitcher />
     </template>
     <template #user-dropdown>

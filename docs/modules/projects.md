@@ -2,7 +2,8 @@
 
 **Store:** `apps/web-antd/src/store/projects.ts` ·
 **Switcher:** `apps/web-antd/src/components/project-switcher.vue`
-(mounted in `apps/web-antd/src/layouts/basic.vue` via the `#header-right-1` slot) ·
+(mounted in `apps/web-antd/src/layouts/basic.vue` via the sidebar `#sidebar-top`
+slot — top-left, directly below the app name) ·
 **Login auto-select:** `apps/web-antd/src/store/auth.ts` calls
 `projectStore.ensureValidSelection()` after `setUserInfo` in `authLogin` + `fetchUserInfo` ·
 **Admin UI:** `apps/web-antd/src/views/autest/setup/index.vue`
@@ -12,7 +13,8 @@ Everything (bugs, tests, BRS, portal folders) is scoped to a project. Users work
 inside the projects they're assigned to; admins manage projects and membership.
 
 ## Requirements
-- ✅ Project switcher in the topbar lists the user's projects (Sprint 1)
+- ✅ Project switcher in the sidebar (top-left, below the app name) lists the
+  user's projects (Sprint 1)
 - ✅ Users see only assigned projects; admins see all (Sprint 1)
 - ✅ Admin can add projects (Sprint 1)
 - ✅ Admin can assign/unassign users to projects (Sprint 1)

@@ -324,6 +324,7 @@ const headerSlots = computed(() => {
     </template>
     <!-- 侧边菜单区域 -->
     <template #menu>
+      <slot name="sidebar-top"></slot>
       <LayoutMenu
         :accordion="preferences.navigation.accordion"
         :collapse="preferences.sidebar.collapsed"

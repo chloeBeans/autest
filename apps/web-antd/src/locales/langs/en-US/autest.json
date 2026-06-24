@@ -109,7 +109,8 @@
     "copyPrompt": "Copy prompt",
     "generateTest": "Generate test",
     "addBug": "Add bug",
-    "pickUp": "Pick up"
+    "pickUp": "Pick up",
+    "edit": "Edit"
   },
   "folders": {
     "title": "Portal Folders",

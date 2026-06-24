@@ -51,12 +51,26 @@ export const BUG_STATUS = {
 } as const;
 export type BugStatus = (typeof BUG_STATUS)[keyof typeof BUG_STATUS];
 
+export const STATUS_OPTIONS: Option<BugStatus>[] = [
+  { value: BUG_STATUS.NEW, label: 'New' },
+  { value: BUG_STATUS.ANALYZED, label: 'Analyzed' },
+  { value: BUG_STATUS.GENERATED, label: 'Generated' },
+  { value: BUG_STATUS.COMMITTED, label: 'Committed' },
+  { value: BUG_STATUS.NEEDS_REVIEW, label: 'Needs review' },
+];
+
 export const CONFIDENCE = {
   HIGH: 'high',
   LOW: 'low',
   UNKNOWN: 'unknown',
 } as const;
 export type Confidence = (typeof CONFIDENCE)[keyof typeof CONFIDENCE];
+
+export const CONFIDENCE_OPTIONS: Option<Confidence>[] = [
+  { value: CONFIDENCE.HIGH, label: 'High' },
+  { value: CONFIDENCE.LOW, label: 'Low' },
+  { value: CONFIDENCE.UNKNOWN, label: 'Unknown' },
+];
 
 export const REQ_STATUS = {
   NOT_STARTED: 'not_started',

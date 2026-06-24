@@ -11,6 +11,8 @@ environment, pick them up, and drive test generation — scoped to the current p
 ## Requirements
 - ✅ **Import** CSV/XLSX via a dialog with column auto-mapping (Sprint 1)
 - ✅ **Add bug manually** via a dialog (id, portal, env, description) (Sprint 1)
+- ✅ **Edit a bug inline** in the table row (id, portal, env, description,
+  status, confidence) with Save/Cancel; add stays in the dialog
 - ✅ List in a DataTable; filter by portal (All/External/Internal) (Sprint 1)
 - ✅ Filter by environment (All/DEV/SIT/UAT); search id + description (Sprint 1)
 - ✅ Status, Confidence, **Picked up by**, Notes/Doubts columns (Sprint 1)

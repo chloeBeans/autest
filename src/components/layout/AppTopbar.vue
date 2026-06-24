@@ -34,11 +34,7 @@ const logout = () => {
 
     <ProjectSwitcher class="mr-2" />
 
-    <v-btn variant="tonal" size="small" class="mr-2" @click="toggleLang">
-      {{ locale === 'en' ? 'BM' : 'EN' }}
-    </v-btn>
-
-    <v-menu>
+    <v-menu :close-on-content-click="false">
       <template #activator="{ props }">
         <v-btn v-bind="props" variant="text" class="text-none">
           <v-avatar size="28" color="primary" class="mr-2">
@@ -54,7 +50,15 @@ const logout = () => {
           </template>
         </v-list-item>
         <v-divider />
-        <v-list-item prepend-icon="mdi-cog-outline" title="Settings" to="/settings" />
+        <v-list-item
+          prepend-icon="mdi-translate"
+          :title="$t('settings.language')"
+          @click="toggleLang"
+        >
+          <template #append>
+            <Badge variant="blue">{{ locale === 'en' ? 'EN' : 'BM' }}</Badge>
+          </template>
+        </v-list-item>
         <v-list-item prepend-icon="mdi-logout" title="Logout" @click="logout" />
       </v-list>
     </v-menu>

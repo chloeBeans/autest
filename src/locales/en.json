@@ -8,7 +8,7 @@
     "bugs": "Bugs",
     "tests": "Tests",
     "brs": "BRS",
-    "settings": "Settings",
+    "settings": "Setup",
     "import": "Import"
   },
   "auth": {
@@ -17,7 +17,7 @@
     "password": "Password"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Setup",
     "preferences": "Preferences",
     "language": "Language",
     "backend": "Backend",
@@ -35,7 +35,8 @@
     "subtitle": "Record, build with drag & drop, or write code",
     "record": "Record",
     "build": "Build (drag & drop)",
-    "code": "Code"
+    "code": "Code",
+    "guide": "Test IDs"
   },
   "record": {
     "title": "Record Test",

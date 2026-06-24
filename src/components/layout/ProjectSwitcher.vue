@@ -43,8 +43,6 @@ function select(id) {
         </template>
       </v-list-item>
       <v-list-item v-if="!myProjects.length" title="No projects assigned" disabled />
-      <v-divider />
-      <v-list-item prepend-icon="mdi-cog-outline" title="Manage in Settings" to="/settings" />
     </v-list>
   </v-menu>
 </template>

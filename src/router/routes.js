@@ -37,7 +37,7 @@ export const routes = [
         path: 'settings',
         name: 'Settings',
         component: () => import('@/views/SettingsView.vue'),
-        meta: { title: 'Settings', icon: 'mdi-cog-outline' },
+        meta: { title: 'Setup', icon: 'mdi-cog-outline' },
       },
     ],
   },

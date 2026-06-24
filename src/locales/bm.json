@@ -8,7 +8,7 @@
     "bugs": "Pepijat",
     "tests": "Ujian",
     "brs": "BRS",
-    "settings": "Tetapan",
+    "settings": "Persediaan",
     "import": "Import"
   },
   "auth": {
@@ -17,7 +17,7 @@
     "password": "Kata laluan"
   },
   "settings": {
-    "title": "Tetapan",
+    "title": "Persediaan",
     "preferences": "Keutamaan",
     "language": "Bahasa",
     "backend": "Pelayan",
@@ -35,7 +35,8 @@
     "subtitle": "Rakam, bina secara seret & lepas, atau tulis kod",
     "record": "Rakam",
     "build": "Bina (seret & lepas)",
-    "code": "Kod"
+    "code": "Kod",
+    "guide": "ID Ujian"
   },
   "record": {
     "title": "Rakam Ujian",

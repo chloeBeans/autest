@@ -17,3 +17,7 @@ sprint it belongs to. **Update the relevant file whenever its module changes.**
 
 Status legend: ✅ done · 🔜 planned · 🚧 in progress.
 Sprint due dates live in [BRS-TRACKING.md](BRS-TRACKING.md).
+
+## Guides
+- [testing/test-ids.md](testing/test-ids.md) — how to write `data-testid` for
+  reliable Playwright tests (also shown in-app on Tests → Test IDs).

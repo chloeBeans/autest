@@ -70,6 +70,79 @@ test('my test', async ({ page }) => {
 });
 `);
 
+// --- Test IDs guide tab ---
+// Examples shown verbatim in the guide so testers can copy the pattern.
+const EX_INLINE = `<!-- Add data-testid to the element you want to target -->
+<button data-testid="login-submit">Sign in</button>
+<input data-testid="login-username" />`;
+
+const EX_PROP =
+  `<!-- Shared base component: add a testId prop, bind to the REAL element -->
+<script setup>
+defineProps({ testId: { type: String, default: null } });
+<` +
+  `/script>
+
+<template>
+  <!-- bind onto the actual <button>/<input>, not the wrapper -->
+  <button :data-testid="testId"><slot /></button>
+</template>
+
+<!-- Usage in any view -->
+<FormButton testId="employer-registration-submit">Submit</FormButton>`;
+
+// Single-quoted lines so the backticks / \${...} stay literal in the snippet.
+const EX_TABLE = [
+  '<!-- GOOD: stable business key (survives sort / filter / paging) -->',
+  '<tr',
+  '  v-for="row in rows"',
+  '  :key="row.id"',
+  '  :data-testid="`registration-list-row-${row.refNo}`"',
+  '>',
+  '  <td>',
+  '    <button :data-testid="`registration-list-edit-${row.refNo}`">Edit</button>',
+  '  </td>',
+  '</tr>',
+  '',
+  '<!-- BAD: index shifts when the list reorders -> flaky -->',
+  '<tr :data-testid="`row-${index}`">...</tr>',
+].join('\n');
+
+const EX_PLAYWRIGHT = `import { test, expect } from '@playwright/test';
+
+test('submit registration', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByTestId('login-username').fill('qa1');
+  await page.getByTestId('login-password').fill('secret');
+  await page.getByTestId('login-submit').click();
+
+  // locate by id, assert on the visible label/value
+  await expect(page.getByTestId('status-badge')).toHaveText('Approved');
+});`;
+
+const guideExamples = [
+  {
+    title: '1. Add an ID inline',
+    desc: 'Put data-testid directly on the element you want a test to find.',
+    code: EX_INLINE,
+  },
+  {
+    title: '2. Reusable component prop',
+    desc: 'For shared components, add a testId prop and forward it to the real inner element. Instrument once, reuse everywhere.',
+    code: EX_PROP,
+  },
+  {
+    title: '3. Table rows — use a stable key, never the index',
+    desc: 'Derive row IDs from a business key (reference no.), so they survive sorting, filtering and pagination.',
+    code: EX_TABLE,
+  },
+  {
+    title: '4. Use it in Playwright',
+    desc: 'Locate by data-testid; assert on the visible value (pin a locale so EN/BM text does not break assertions).',
+    code: EX_PLAYWRIGHT,
+  },
+];
+
 // --- shared save ---
 async function save(fileName, content) {
   try {
@@ -101,6 +174,7 @@ const tabs = computed(() => [
   { label: $t('tests.record'), value: 'record', icon: 'mdi-record-circle-outline' },
   { label: $t('tests.build'), value: 'build', icon: 'mdi-drag-variant' },
   { label: $t('tests.code'), value: 'code', icon: 'mdi-code-tags' },
+  { label: $t('tests.guide'), value: 'guide', icon: 'mdi-tag-text-outline' },
 ]);
 </script>
 
@@ -230,7 +304,7 @@ const tabs = computed(() => [
       </div>
 
       <!-- Code -->
-      <div v-else>
+      <div v-else-if="tab === 'code'">
         <v-textarea
           v-model="code"
           rows="16"
@@ -242,6 +316,57 @@ const tabs = computed(() => [
         <FormButton class="mt-3" prependIcon="mdi-content-save-outline" @click="saveCode">
           {{ connected ? 'Save to folder' : $t('general.download') }}
         </FormButton>
+      </div>
+
+      <!-- Test IDs guide -->
+      <div v-else>
+        <v-alert
+          type="info"
+          variant="tonal"
+          border="start"
+          class="mb-4"
+          icon="mdi-information-outline"
+        >
+          <strong
+            >Locate by <span class="mono">data-testid</span>, assert on the visible label.</strong
+          >
+          Test IDs are stable selectors that don't break when copy or language (EN/BM) changes.
+        </v-alert>
+
+        <div class="text-subtitle-2 font-weight-bold mb-1">Naming convention</div>
+        <ul class="text-body-2 mb-4 ps-4">
+          <li>
+            <span class="mono">module-screen-element</span> in kebab-case — e.g.
+            <span class="mono">login-submit</span>,
+            <span class="mono">registration-list-table</span>.
+          </li>
+          <li>
+            Select by <span class="mono">data-testid</span>; assert on the visible text / value.
+          </li>
+          <li>
+            For table rows, append a <strong>stable record key</strong> (reference no.) — never the
+            array index.
+          </li>
+          <li>Don't locate by label text — it changes between EN and BM.</li>
+        </ul>
+
+        <div v-for="ex in guideExamples" :key="ex.title" class="mb-4">
+          <div class="d-flex align-center justify-space-between mb-1 flex-wrap ga-2">
+            <div>
+              <div class="text-subtitle-2 font-weight-bold">{{ ex.title }}</div>
+              <div class="text-caption text-medium-emphasis">{{ ex.desc }}</div>
+            </div>
+            <FormButton
+              size="md"
+              variant="line-primary"
+              prependIcon="mdi-content-copy"
+              @click="copy(ex.code, 'Example')"
+            >
+              {{ $t('general.copy') }}
+            </FormButton>
+          </div>
+          <div class="code-block">{{ ex.code }}</div>
+        </div>
       </div>
     </Card>
   </div>

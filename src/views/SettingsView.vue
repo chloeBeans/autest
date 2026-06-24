@@ -72,20 +72,46 @@ function addUser() {
   }
 }
 
-// --- Admin: membership ---
+// --- Admin: membership (built to scale to hundreds of members) ---
 const membershipProjectId = ref(projectStore.currentProjectId);
 const membershipProject = computed(() =>
   projectStore.projects.find(p => p.id === membershipProjectId.value)
 );
-const nonMembers = computed(() => {
-  const members = membershipProject.value?.members || [];
-  return userStore.users.filter(u => !members.includes(u.username)).map(u => u.username);
+
+const userMap = computed(() => Object.fromEntries(userStore.users.map(u => [u.username, u])));
+
+const memberCount = computed(() => membershipProject.value?.members?.length || 0);
+
+// Members resolved to user objects, filtered by the search box.
+const memberSearch = ref('');
+const members = computed(() => {
+  const list = (membershipProject.value?.members || []).map(
+    username => userMap.value[username] || { username, name: username, role: 'user' }
+  );
+  const q = memberSearch.value.trim().toLowerCase();
+  if (!q) return list;
+  return list.filter(
+    u => u.username.toLowerCase().includes(q) || (u.name || '').toLowerCase().includes(q)
+  );
 });
-const addMemberUser = ref(null);
-function assign() {
-  if (!addMemberUser.value) return;
-  projectStore.assignUser(membershipProjectId.value, addMemberUser.value);
-  addMemberUser.value = null;
+
+// Non-members as searchable options for the multi-add autocomplete.
+const nonMemberItems = computed(() => {
+  const memberSet = new Set(membershipProject.value?.members || []);
+  return userStore.users
+    .filter(u => !memberSet.has(u.username))
+    .map(u => ({ title: `${u.name} (${u.username})`, value: u.username }));
+});
+
+const addMemberUsers = ref([]);
+function assignSelected() {
+  if (!addMemberUsers.value.length) return;
+  const count = addMemberUsers.value.length;
+  addMemberUsers.value.forEach(username =>
+    projectStore.assignUser(membershipProjectId.value, username)
+  );
+  toast.success(`Added ${count} member${count > 1 ? 's' : ''}`);
+  addMemberUsers.value = [];
 }
 function unassign(username) {
   projectStore.unassignUser(membershipProjectId.value, username);
@@ -121,8 +147,17 @@ const projectItems = computed(() =>
               <v-icon :icon="p.icon" color="primary" />
               <div>
                 <div class="font-weight-medium">{{ $t(p.label) }}</div>
-                <div class="text-caption mono text-medium-emphasis">
-                  {{ folderStore.names[p.value] || $t('folders.notConnected') }}
+                <div
+                  class="text-caption mono"
+                  :class="
+                    folderStore.isConnected(p.value) ? 'text-primary' : 'text-medium-emphasis'
+                  "
+                >
+                  {{
+                    folderStore.isConnected(p.value)
+                      ? `${folderStore.names[p.value]}/tests/`
+                      : $t('folders.notConnected')
+                  }}
                 </div>
               </div>
             </div>
@@ -142,6 +177,10 @@ const projectItems = computed(() =>
           </div>
         </v-col>
       </v-row>
+      <div class="text-caption text-medium-emphasis mt-2">
+        Browsers expose only the connected folder name (not the full disk path); generated specs are
+        written to <span class="mono">&lt;folder&gt;/tests/</span>.
+      </div>
     </Card>
 
     <!-- Preferences -->
@@ -239,42 +278,86 @@ const projectItems = computed(() =>
 
       <Card>
         <template #header>
-          <v-icon icon="mdi-account-switch-outline" color="secondary" class="mr-2" />
-          {{ $t('settings.membership') }}
+          <div class="d-flex align-center justify-space-between" style="width: 100%">
+            <span>
+              <v-icon icon="mdi-account-switch-outline" color="secondary" class="mr-2" />
+              {{ $t('settings.membership') }}
+            </span>
+            <Badge variant="blue">{{ memberCount }} members</Badge>
+          </div>
         </template>
-        <v-select
-          v-model="membershipProjectId"
-          :items="projectItems"
-          :label="$t('settings.project')"
-          class="mb-3"
-          style="max-width: 320px"
-        />
-        <div class="mb-2">
-          <v-chip
-            v-for="m in membershipProject?.members || []"
-            :key="m"
-            class="ma-1"
-            closable
-            @click:close="unassign(m)"
-          >
-            {{ m }}
-          </v-chip>
-          <span v-if="!(membershipProject?.members || []).length" class="text-medium-emphasis"
-            >No members</span
-          >
-        </div>
-        <div class="d-flex ga-2" style="max-width: 420px">
-          <v-select
-            v-model="addMemberUser"
-            :items="nonMembers"
+
+        <v-row dense class="mb-1">
+          <v-col cols="12" md="5">
+            <v-autocomplete
+              v-model="membershipProjectId"
+              :items="projectItems"
+              :label="$t('settings.project')"
+              hide-details
+              density="comfortable"
+            />
+          </v-col>
+        </v-row>
+
+        <!-- Add members: searchable, multi-select -->
+        <div class="d-flex ga-2 mb-3 align-start flex-wrap">
+          <v-autocomplete
+            v-model="addMemberUsers"
+            :items="nonMemberItems"
             :label="$t('settings.addMember')"
+            multiple
+            chips
+            closable-chips
             hide-details
             density="comfortable"
+            style="min-width: 320px; flex: 1"
           />
-          <FormButton prependIcon="mdi-account-plus-outline" @click="assign">{{
-            $t('settings.assign')
-          }}</FormButton>
+          <FormButton
+            prependIcon="mdi-account-plus-outline"
+            :disabled="!addMemberUsers.length"
+            @click="assignSelected"
+          >
+            {{ $t('settings.assign') }}
+          </FormButton>
         </div>
+
+        <!-- Search + virtualized member list (scales to hundreds) -->
+        <v-text-field
+          v-model="memberSearch"
+          prepend-inner-icon="mdi-magnify"
+          :label="$t('general.search')"
+          density="comfortable"
+          hide-details
+          clearable
+          class="mb-2"
+          style="max-width: 320px"
+        />
+
+        <div v-if="!memberCount" class="text-medium-emphasis py-4">No members yet</div>
+        <div v-else-if="!members.length" class="text-medium-emphasis py-4">No members match.</div>
+        <v-virtual-scroll v-else :items="members" height="360" item-height="60" class="member-list">
+          <template #default="{ item }">
+            <div class="d-flex align-center justify-space-between member-row px-3">
+              <div class="d-flex align-center ga-3">
+                <v-avatar size="32" color="primary" variant="tonal">
+                  <span class="text-caption">{{ (item.username[0] || '?').toUpperCase() }}</span>
+                </v-avatar>
+                <div>
+                  <div class="font-weight-medium">{{ item.name }}</div>
+                  <div class="text-caption mono text-medium-emphasis">{{ item.username }}</div>
+                </div>
+                <Badge :variant="item.role === 'admin' ? 'purple' : 'grey'">{{ item.role }}</Badge>
+              </div>
+              <v-btn
+                icon="mdi-account-remove-outline"
+                variant="text"
+                color="error"
+                size="small"
+                @click="unassign(item.username)"
+              />
+            </div>
+          </template>
+        </v-virtual-scroll>
       </Card>
     </template>
   </div>
@@ -284,5 +367,13 @@ const projectItems = computed(() =>
 .folder-row {
   border: 1px solid #e6e9f0;
   border-radius: 12px;
+}
+.member-list {
+  border: 1px solid #e6e9f0;
+  border-radius: 12px;
+}
+.member-row {
+  height: 60px;
+  border-bottom: 1px solid #f0f2f6;
 }
 </style>

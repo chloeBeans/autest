@@ -11,5 +11,9 @@ export const overridesPreferences = defineOverridesPreferences({
     name: import.meta.env.VITE_APP_TITLE,
     locale: 'en-US',
   },
+  logo: {
+    // Autest smiling-robot brand mark (public/logo.svg) — replaces the Vben default.
+    source: '/logo.svg',
+  },
   // theme: { colorPrimary: '...' },  // TODO: set Autest brand color once decided
 });

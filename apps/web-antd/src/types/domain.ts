@@ -61,13 +61,33 @@ export interface Sprint {
   dueDate: string;
 }
 
-/** A BRS record: its own requirement items + sprints (doc blob kept separately). */
+/**
+ * A BRS record — now just a document descriptor under a module. The requirement
+ * items + sprints live on the {@link Module}; the doc blob is kept separately
+ * (in-memory). `updatedDate` is picked by the uploader (the BRS version date).
+ */
 export interface BrsRecord {
   id: string;
   name: string;
+  uploadedAt: string;
+  updatedDate: string;
+}
+
+/**
+ * A module groups several BRS documents under a project and owns one shared
+ * requirement tracker (items) + sprints. Admin-managed; `members` lists the
+ * users who can see/use the module (a subset of the project's members).
+ */
+export interface Module {
+  id: string;
+  projectId: string;
+  name: string;
+  members: string[];
+  createdBy: string;
+  brsList: BrsRecord[];
+  currentBrsId: null | string;
   items: RequirementItem[];
   sprints: Sprint[];
-  uploadedAt: string;
 }
 
 /** A generated Playwright spec ({ fileName, content }). */
@@ -78,7 +98,7 @@ export interface SpecFile {
 
 /** One step in the drag-and-drop test builder. */
 export interface PlaywrightStep {
-  type: 'goto' | 'click' | 'fill' | 'expectVisible' | 'expectText';
+  type: 'click' | 'expectText' | 'expectVisible' | 'fill' | 'goto';
   selector?: string;
   value?: string;
 }
@@ -99,7 +119,7 @@ export interface ColumnMapping {
   useSheetNameAsPortal?: boolean;
 }
 
-export type BrsKind = 'pdf' | 'html' | 'markdown' | 'text';
+export type BrsKind = 'html' | 'markdown' | 'pdf' | 'text';
 
 /** A BRS document read into a viewable + extractable form. */
 export interface BrsDocument {

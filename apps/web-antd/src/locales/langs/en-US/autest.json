@@ -29,7 +29,12 @@
     "users": "Users (admin)",
     "membership": "Project membership (admin)",
     "addMember": "Add member",
-    "assign": "Assign"
+    "assign": "Assign",
+    "modules": "Modules (admin)",
+    "newModule": "New module name",
+    "removeModule": "Remove this module?",
+    "moduleMembership": "Module members (admin)",
+    "selectModuleHint": "Select a module to manage its members."
   },
   "tests": {
     "title": "Tests",
@@ -131,7 +136,16 @@
   },
   "brs": {
     "title": "BRS",
+    "module": "Module",
+    "members": "members",
+    "noModules": "No modules available",
+    "noModulesHint": "An admin can create modules in Setup.",
+    "noActiveModule": "No active module — ask an admin to add you to one.",
+    "documents": "Documents",
     "upload": "Upload BRS",
+    "addBrs": "+ Add BRS",
+    "removeBrs": "Remove this BRS?",
+    "updatedDate": "Updated date",
     "viewer": "Document",
     "tracker": "Requirement tracker",
     "addItem": "Add requirement",

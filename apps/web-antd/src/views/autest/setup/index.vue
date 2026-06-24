@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Project, PublicAccount } from '#/types/domain';
+import type { Module, Project, PublicAccount } from '#/types/domain';
 
 import { computed, reactive, ref } from 'vue';
 
@@ -12,6 +12,7 @@ import {
   Form,
   FormItem,
   Input,
+  Popconfirm,
   Select,
   Table,
   Tag,
@@ -20,6 +21,7 @@ import {
 import { $t } from '#/locales';
 import { useAccountStore } from '#/store/accounts';
 import { useFolderStore } from '#/store/folders';
+import { useModuleStore } from '#/store/modules';
 import { useProjectStore } from '#/store/projects';
 import { PORTALS } from '#/utils/constants';
 import { isFileSystemAccessSupported, pickDirectory } from '#/utils/fileSystem';
@@ -28,6 +30,7 @@ import { toast } from '#/utils/toast';
 const projectStore = useProjectStore();
 const accountStore = useAccountStore();
 const folderStore = useFolderStore();
+const moduleStore = useModuleStore();
 
 const supported = isFileSystemAccessSupported();
 
@@ -184,6 +187,114 @@ function assignSelected() {
 function unassign(username: string) {
   try {
     projectStore.unassignUser(membershipProjectId.value, username);
+  } catch (error) {
+    toast.error((error as Error).message);
+  }
+}
+
+// --- Admin: modules (per project) ---
+function moduleRowKey(record: Module) {
+  return record.id;
+}
+
+const moduleProjectId = ref<string>(projectStore.currentProjectId ?? '');
+const newModuleName = ref('');
+
+const moduleList = computed<Module[]>(() =>
+  moduleStore.modulesOf(moduleProjectId.value),
+);
+
+function addModule() {
+  try {
+    moduleStore.addModule(newModuleName.value, moduleProjectId.value);
+    toast.success('Module added');
+    newModuleName.value = '';
+  } catch (error) {
+    toast.error((error as Error).message);
+  }
+}
+
+function renameModule(id: string, name: string) {
+  try {
+    moduleStore.renameModule(id, name);
+  } catch (error) {
+    toast.error((error as Error).message);
+  }
+}
+
+function removeModule(id: string) {
+  try {
+    moduleStore.removeModule(id);
+    if (selectedModuleId.value === id) selectedModuleId.value = '';
+  } catch (error) {
+    toast.error((error as Error).message);
+  }
+}
+
+const moduleColumns = [
+  { title: $t('autest.brs.module'), dataIndex: 'name', key: 'name' },
+  { title: 'BRS', key: 'brs', width: 80 },
+  { title: $t('autest.settings.members'), key: 'members', width: 90 },
+  { title: '', key: 'actions', width: 90 },
+];
+
+// --- Admin: module membership (members are a subset of project members) ---
+const selectedModuleId = ref<string>('');
+const addModuleMembers = ref<string[]>([]);
+const moduleMemberSearch = ref('');
+
+const moduleOptions = computed(() =>
+  moduleList.value.map((m) => ({ label: m.name, value: m.id })),
+);
+
+const selectedModule = computed(() =>
+  moduleList.value.find((m) => m.id === selectedModuleId.value),
+);
+
+const moduleMembers = computed<PublicAccount[]>(() => {
+  const list = (selectedModule.value?.members ?? []).map(
+    (u) =>
+      accountByName.value[u] ?? { username: u, realName: u, roles: ['user'] },
+  );
+  const q = moduleMemberSearch.value.trim().toLowerCase();
+  if (!q) return list;
+  return list.filter(
+    (a) =>
+      a.username.toLowerCase().includes(q) ||
+      a.realName.toLowerCase().includes(q),
+  );
+});
+
+// Only the project's members can be added to one of its modules.
+const moduleCandidateOptions = computed(() => {
+  if (!selectedModule.value) return [];
+  const inModule = new Set(selectedModule.value.members);
+  return projectStore
+    .membersOf(moduleProjectId.value)
+    .filter((u) => !inModule.has(u))
+    .map((u) => {
+      const a = accountByName.value[u];
+      return { label: a ? `${a.realName} (${u})` : u, value: u };
+    });
+});
+
+function assignModuleMembers() {
+  if (!selectedModuleId.value || addModuleMembers.value.length === 0) return;
+  const count = addModuleMembers.value.length;
+  try {
+    addModuleMembers.value.forEach((u) =>
+      moduleStore.assignMember(selectedModuleId.value, u),
+    );
+    toast.success(`Added ${count} member${count > 1 ? 's' : ''}`);
+    addModuleMembers.value = [];
+  } catch (error) {
+    toast.error((error as Error).message);
+  }
+}
+
+function unassignModuleMember(username: string) {
+  try {
+    moduleStore.unassignMember(selectedModuleId.value, username);
   } catch (error) {
     toast.error((error as Error).message);
   }
@@ -367,6 +478,134 @@ function unassign(username: string) {
             </template>
           </template>
         </Table>
+      </Card>
+
+      <!-- Modules -->
+      <Card :title="$t('autest.settings.modules')" class="mb-4">
+        <div class="membership-controls">
+          <Select
+            v-model:value="moduleProjectId"
+            :options="projectOptions"
+            :placeholder="$t('autest.settings.project')"
+            class="project-select"
+          />
+        </div>
+
+        <div class="add-row mt-3">
+          <Input
+            v-model:value="newModuleName"
+            :placeholder="$t('autest.settings.newModule')"
+          />
+          <Button type="primary" @click="addModule">
+            {{ $t('autest.general.save') }}
+          </Button>
+        </div>
+
+        <Table
+          :columns="moduleColumns"
+          :data-source="moduleList"
+          :row-key="moduleRowKey"
+          :pagination="false"
+          size="small"
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'name'">
+              <Input
+                :value="record.name"
+                :bordered="false"
+                @update:value="(v) => renameModule(record.id, v)"
+              />
+            </template>
+            <template v-else-if="column.key === 'brs'">
+              {{ record.brsList.length }}
+            </template>
+            <template v-else-if="column.key === 'members'">
+              {{ record.members.length }}
+            </template>
+            <template v-else-if="column.key === 'actions'">
+              <Popconfirm
+                :title="$t('autest.settings.removeModule')"
+                @confirm="removeModule(record.id)"
+              >
+                <Button danger size="small">
+                  {{ $t('autest.general.remove') }}
+                </Button>
+              </Popconfirm>
+            </template>
+          </template>
+        </Table>
+      </Card>
+
+      <!-- Module membership -->
+      <Card :title="$t('autest.settings.moduleMembership')" class="mb-4">
+        <div class="membership-controls">
+          <Select
+            v-model:value="selectedModuleId"
+            :options="moduleOptions"
+            :placeholder="$t('autest.brs.module')"
+            class="project-select"
+          />
+        </div>
+
+        <template v-if="selectedModule">
+          <div class="add-row mt-3">
+            <Select
+              v-model:value="addModuleMembers"
+              mode="multiple"
+              :options="moduleCandidateOptions"
+              :placeholder="$t('autest.settings.addMember')"
+              option-filter-prop="label"
+              class="member-add"
+            />
+            <Button
+              type="primary"
+              :disabled="addModuleMembers.length === 0"
+              @click="assignModuleMembers"
+            >
+              {{ $t('autest.settings.assign') }}
+            </Button>
+          </div>
+
+          <Input
+            v-model:value="moduleMemberSearch"
+            :placeholder="$t('autest.general.search')"
+            allow-clear
+            class="member-search mt-3"
+          />
+
+          <Table
+            :columns="memberColumns"
+            :data-source="moduleMembers"
+            :row-key="accountRowKey"
+            :pagination="{ pageSize: 10, hideOnSinglePage: true }"
+            size="small"
+            class="mt-2"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'roles'">
+                <Tag
+                  v-for="role in record.roles"
+                  :key="role"
+                  :color="role === 'admin' ? 'purple' : 'default'"
+                >
+                  {{ role }}
+                </Tag>
+              </template>
+              <template v-else-if="column.key === 'actions'">
+                <Button
+                  danger
+                  size="small"
+                  @click="unassignModuleMember(record.username)"
+                >
+                  {{ $t('autest.general.remove') }}
+                </Button>
+              </template>
+            </template>
+          </Table>
+        </template>
+        <p v-else class="muted text-xs">
+          {{ $t('autest.settings.selectModuleHint') }}
+        </p>
       </Card>
     </template>
   </Page>

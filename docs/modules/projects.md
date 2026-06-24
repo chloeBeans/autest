@@ -22,6 +22,15 @@ inside the projects they're assigned to; admins manage projects and membership.
   `bugs`, `brs`, and `folders` stores (Sprint 1)
 - ✅ Switching project swaps the active data; each project's data is kept (Sprint 1)
 
+## Modules
+Each project is further split into **modules** (admin-managed). BRS documents and
+the requirement tracker are scoped to a module, and modules have their own member
+list (a subset of the project's members). See [brs.md](brs.md) and
+[settings.md](settings.md). Store: `apps/web-antd/src/store/modules.ts`.
+
 ## Data model
 `project = { id, name, createdBy, members: [username] }`; `currentProjectId`
 drives the scoped getters in the data stores.
+`module = { id, projectId, name, members: [username], createdBy, brsList,
+currentBrsId, items, sprints }`; `byProject[pid].currentModuleId` selects the
+active module.

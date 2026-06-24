@@ -8,9 +8,9 @@ import { useUserStore } from '@vben/stores';
 import { Card, Col, Progress, Row, Statistic, Tag } from 'ant-design-vue';
 
 import { $t } from '#/locales';
-import { useBrsStore } from '#/store/brs';
 import { useBugStore } from '#/store/bugs';
 import { useFolderStore } from '#/store/folders';
+import { useModuleStore } from '#/store/modules';
 import { useProjectStore } from '#/store/projects';
 import { PORTALS } from '#/utils/constants';
 
@@ -18,7 +18,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const projectStore = useProjectStore();
 const bugStore = useBugStore();
-const brsStore = useBrsStore();
+const moduleStore = useModuleStore();
 const folderStore = useFolderStore();
 
 const greeting = computed(
@@ -78,8 +78,8 @@ function folderState(portal: string) {
         <Card>
           <Statistic
             title="BRS done"
-            :value="brsStore.progress.done"
-            :suffix="`/ ${brsStore.progress.total}`"
+            :value="moduleStore.projectProgress.done"
+            :suffix="`/ ${moduleStore.projectProgress.total}`"
           />
         </Card>
       </Col>
@@ -127,8 +127,8 @@ function folderState(portal: string) {
             </Tag>
           </div>
           <Progress
-            v-if="brsStore.progress.total"
-            :percent="brsStore.progress.pct"
+            v-if="moduleStore.projectProgress.total"
+            :percent="moduleStore.projectProgress.pct"
             size="small"
             class="mt-2"
           />

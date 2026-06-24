@@ -39,8 +39,12 @@ assigned to a sprint. **Dates are placeholders — adjust to your real calendar.
 | R29 | Portal folders in Settings (linked from dashboard) | ✅ Done | Sprint 1 | 2026-06-24 |
 | R30 | Shared git rule (committed CLAUDE.md + .claude/settings.json hook) | ✅ Done | Sprint 1 | 2026-06-24 |
 | R31 | Test ID guide on Tests page + docs (how to write data-testid) | ✅ Done | Sprint 1 | 2026-06-24 |
-| R32 | Multiple BRS per project (add / switch / delete, each with own reqs) | ✅ Done | Sprint 1 | 2026-06-24 |
+| R32 | Multiple BRS per project (superseded by R34–R35: BRS now grouped by module) | ✅ Done | Sprint 1 | 2026-06-24 |
 | R33 | Scalable project membership (search, multi-add, virtualized list) | ✅ Done | Sprint 1 | 2026-06-24 |
+| R34 | Modules per project — admin create / rename / delete in Setup | ✅ Done | Sprint 1 | 2026-06-24 |
+| R35 | BRS grouped by module; multiple BRS per module, each with an editable updated date | ✅ Done | Sprint 1 | 2026-06-24 |
+| R36 | One requirement tracker + sprints per module; anyone can add/edit/delete | ✅ Done | Sprint 1 | 2026-06-24 |
+| R37 | Per-module members (admin assigns from project members); users see only their modules | ✅ Done | Sprint 1 | 2026-06-24 |
 | R15 | Real backend: execute `npx playwright test`, stream results | 🔜 Planned | Sprint 2 | — |
 | R16 | Real git commit of confident fixes | 🔜 Planned | Sprint 2 | — |
 | R17 | Persist folder handles across reloads (IndexedDB) | 🔜 Planned | Sprint 2 | — |

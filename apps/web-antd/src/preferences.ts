@@ -11,9 +11,5 @@ export const overridesPreferences = defineOverridesPreferences({
     name: import.meta.env.VITE_APP_TITLE,
     locale: 'en-US',
   },
-  widget: {
-    // Hide the "Set Timezone" button from the header
-    timezone: false,
-  },
   // theme: { colorPrimary: '...' },  // TODO: set Autest brand color once decided
 });

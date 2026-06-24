@@ -40,6 +40,18 @@ pnpm exec eslint "src/views/autest/**/*.vue" "src/router/routes/modules/autest.t
   admin: add/list projects, add/list users, **scalable membership** with searchable multi-add + filterable table).
 - **BRS** — `views/autest/brs/index.vue` (multiple BRS per project: select/add/remove; viewer for
   PDF/DOCX/MD/TXT; requirement tracker with sprint AutoComplete, status, completed date; sprint due dates).
+- **Tests** — `views/autest/tests/index.vue` (4 tabs on Ant `Tabs`/`TabPane`):
+  - **Record**: live `npx playwright codegen` command (copy), draggable bookmarklet, `Collapse`
+    with full recorder snippet (copy) — from `#/utils/recorder`.
+  - **Build (drag & drop)**: native HTML5 drag-to-reorder step rows (type/selector/value + delete),
+    live spec preview via `buildTestFromSteps` (`#/utils/playwright`).
+  - **Code**: raw spec editor (`Textarea` `auto-size`).
+  - **Test IDs**: in-app guide + 4 copyable examples (inline / component-prop / stable table keys /
+    Playwright usage).
+  - Save: `folderStore.handleFor(portal)` → `writeFile(handle, 'tests', …)` else `downloadTextFile`.
+  - New i18n keys under `autest.tests` (savePortal/saveToFolder/notConnected/selector/stepValue)
+    and `autest.record` (showSnippet/dragHint). Adversarially reviewed (clipboard error handling +
+    editor auto-grow) and verified.
 
 All of the above: **typecheck ✅ · eslint ✅**.
 
@@ -47,24 +59,14 @@ All of the above: **typecheck ✅ · eslint ✅**.
 
 ## 🔜 Next steps (in order)
 
-### 1. Tests view — `views/autest/tests/index.vue` (currently a placeholder)
-Port the 4-tab page from the old Vuetify version:
-- **Record**: `buildCodegenCommand`, `buildBookmarklet`, `RECORDER_SOURCE` from `#/utils/recorder`.
-- **Build (drag & drop)**: step list → `buildTestFromSteps` from `#/utils/playwright`. (Use native HTML5 DnD.)
-- **Code**: raw spec editor.
-- **Test IDs guide**: static guide + copyable snippets (locate by `data-testid`, assert on label).
-- Save target: `useFolderStore().handleFor(portal)` → `writeFile(handle, 'tests', fileName, content)`
-  (or `downloadTextFile`) from `#/utils/fileSystem`. `slugify` from `#/utils/format`.
-- Add any new strings to `src/locales/langs/en-US/autest.json` under `autest.tests` / `autest.record`.
-
-### 2. Topbar project switcher + selection on login
+### 1. Topbar project switcher + selection on login
 - Add a switcher (dropdown of `projectStore.myProjects`) into the Vben layout header
   (header slot/widget) to set `projectStore.currentProjectId` via `selectProject`.
 - Call `projectStore.ensureValidSelection()` after login — hook into `auth.ts`
   `fetchUserInfo()` (or a router guard) so a user lands on a project they belong to.
   Currently `currentProjectId` is fixed to the seeded `proj_icoms`.
 
-### 3. (Optional) Generate-test confidence flow
+### 2. (Optional) Generate-test confidence flow
 Old version had an analyze step (confidence high → commit-mock, low → Notes/Doubts).
 Not ported. Bugs "Generate test" currently builds a spec from the template directly.
 If wanted, add an analyze modal + wire `bug.confidence` / `bug.note`.
@@ -81,6 +83,15 @@ If wanted, add an analyze modal + wire `bug.confidence` / `bug.note`.
   script, not inline.
 - **Ant Table** `#bodyCell` `record` is `Record<string, any>` — cast at the call site
   in script (param `unknown`, or `record as XRecord`).
+- **SFC block-scan gotcha (Tests view)**: a literal `</script>` anywhere in the
+  `<script>` block — even inside a **JS comment or string** — ends the SFC block early
+  (`@vue/compiler-sfc` reads `<script>` as raw text). For code samples that contain
+  `</script>` (the Test IDs guide), split it: `` `…<${'/script>'}` ``. Literal `${…}`
+  inside single-quoted example strings trips `no-template-curly-in-string`; wrap with
+  `/* eslint-disable no-template-curly-in-string */`.
+- **Ant Select with a union-typed model**: bind `:value` + `@change` (handler casts),
+  not `v-model:value` — `v-model` writes the wide `SelectValue` back into the narrow
+  union and vue-tsc errors. Plain `string`/`string[]` refs are fine with `v-model:value`.
 - **IDE false positives**: editor may show `Cannot find module '#/...'`. Ignore — the
   CLI `pnpm typecheck` (vue-tsc) resolves the `#/*` path map (= `apps/web-antd/src`).
   `@vben/*` = workspace packages.

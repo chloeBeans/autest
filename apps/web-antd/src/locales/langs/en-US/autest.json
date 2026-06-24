@@ -37,7 +37,12 @@
     "record": "Record",
     "build": "Build (drag & drop)",
     "code": "Code",
-    "guide": "Test IDs"
+    "guide": "Test IDs",
+    "savePortal": "Save into portal",
+    "saveToFolder": "Save to folder",
+    "notConnected": "Folder not connected — saves will download. Connect in Setup.",
+    "selector": "Selector",
+    "stepValue": "Value"
   },
   "record": {
     "title": "Record Test",
@@ -49,6 +54,8 @@
     "bookmarklet": "Autest Recorder",
     "copyCommand": "Copy command",
     "copySnippet": "Copy snippet",
+    "showSnippet": "Show recorder snippet",
+    "dragHint": "← drag me to your bookmarks bar",
     "targetUrl": "Target app URL",
     "testName": "Test name"
   },

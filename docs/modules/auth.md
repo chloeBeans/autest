@@ -1,7 +1,8 @@
 # Module: Auth & users
 
-**Views:** `src/views/LoginView.vue` · **Stores:** `src/store/{auth,users}.js` ·
-**Guard:** `src/router/index.js`
+**Views:** `apps/web-antd/src/views/_core/authentication/login.vue` ·
+**Stores:** `apps/web-antd/src/store/{auth,accounts}.ts` ·
+**Guard:** Vben router access guard
 
 ## Purpose
 Identify who is logged in (and who picks up a bug). Roles gate admin features.
@@ -18,6 +19,13 @@ Identify who is logged in (and who picks up a bug). Roles gate admin features.
 `admin/admin` (admin), `qa1/qa1`, `qa2/qa2`, `dev1/dev1` (users).
 
 ## Notes
-- `users` store is the mock data layer (persisted, plain passwords — mock only).
-- `auth.login()` validates against it; swap to a backend later without changing
+- `accounts` store is the mock data layer (persisted, plain passwords — mock only).
+- `auth.authLogin()` validates against it; swap to a backend later without changing
   call sites.
+- Login page is a quick-select + username/password form. The "Select account"
+  dropdown is sourced from the `accounts` store (not the stock Vben demo list,
+  which filled non-existent `vben`/`jack`/`123456` and broke login); picking an
+  account auto-fills its real username + password. The stock slider captcha was
+  removed, and the alternate login methods are hidden via props
+  (`show-third-party-login`, `show-code-login`, `show-qrcode-login`,
+  `show-register`, `show-forget-password` = `false`).

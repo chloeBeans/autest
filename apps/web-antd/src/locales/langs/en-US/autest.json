@@ -14,7 +14,8 @@
   "auth": {
     "signIn": "Sign in",
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "invalid": "Invalid username or password"
   },
   "settings": {
     "title": "Setup",

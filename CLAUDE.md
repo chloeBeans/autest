@@ -18,6 +18,11 @@ and AI assistants alike). They are committed so each clone gets them. The
 4. On completing any change, **write a recommended commit message** and
    **remind the user to review before committing and pushing.**
 
+## No assumptions (hard rule)
+- **Never assume anything.** If there is any doubt about requirements, scope,
+  naming, behavior, or intent, **stop and ask the user** before proceeding.
+  Do not guess or fill gaps with defaults — confirm first.
+
 ## Other conventions
 - Keep `docs/modules/*` requirement docs and `docs/BRS-TRACKING.md` up to date
   with every change.

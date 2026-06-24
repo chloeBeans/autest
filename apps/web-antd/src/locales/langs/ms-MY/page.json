@@ -1,0 +1,287 @@
+{
+  "auth": {
+    "login": "Log Masuk",
+    "register": "Daftar",
+    "codeLogin": "Log Masuk Kod",
+    "qrcodeLogin": "Log Masuk Kod QR",
+    "forgetPassword": "Lupa Kata Laluan",
+    "profile": "Profil"
+  },
+  "dashboard": {
+    "title": "Papan Pemuka",
+    "analytics": "Analitik",
+    "workspace": "Ruang Kerja"
+  },
+  "profile": {
+    "title": "Profil",
+    "tabs": {
+      "basic": "Tetapan Asas",
+      "security": "Tetapan Keselamatan",
+      "password": "Tukar Kata Laluan",
+      "notice": "Pemberitahuan Mesej"
+    },
+    "base": {
+      "roles": {
+        "admin": "Pentadbir",
+        "user": "Pengguna",
+        "test": "Ujian"
+      },
+      "fields": {
+        "realName": "Nama",
+        "username": "Nama Pengguna",
+        "roles": "Peranan",
+        "introduction": "Bio"
+      }
+    },
+    "security": {
+      "accountPassword": {
+        "label": "Kata Laluan Akaun",
+        "description": "Kekuatan kata laluan semasa: Kuat"
+      },
+      "securityPhone": {
+        "label": "Telefon Keselamatan",
+        "description": "Telefon terikat: 138****8293"
+      },
+      "securityQuestion": {
+        "label": "Soalan Keselamatan",
+        "description": "Tiada soalan keselamatan ditetapkan. Soalan keselamatan melindungi akaun anda dengan berkesan."
+      },
+      "securityEmail": {
+        "label": "E-mel Sandaran",
+        "description": "E-mel terikat: ant***sign.com"
+      },
+      "securityMfa": {
+        "label": "Peranti MFA",
+        "description": "Tiada peranti MFA terikat. Selepas terikat, anda boleh menggunakan pengesahan dua faktor."
+      }
+    },
+    "password": {
+      "oldPassword": {
+        "label": "Kata Laluan Lama",
+        "placeholder": "Sila masukkan kata laluan lama anda"
+      },
+      "newPassword": {
+        "label": "Kata Laluan Baharu",
+        "placeholder": "Sila masukkan kata laluan baharu anda"
+      },
+      "confirmPassword": {
+        "label": "Sahkan Kata Laluan",
+        "placeholder": "Sila masukkan semula kata laluan baharu anda",
+        "requiredError": "Sila masukkan semula kata laluan baharu anda",
+        "minError": "Sila masukkan semula kata laluan baharu anda",
+        "mismatch": "Kedua-dua kata laluan tidak sepadan"
+      },
+      "submitSuccess": "Kata laluan berjaya ditukar"
+    },
+    "notice": {
+      "accountPassword": {
+        "label": "Mesej Akaun",
+        "description": "Mesej daripada pengguna lain dihantar sebagai pemberitahuan dalam aplikasi"
+      },
+      "systemMessage": {
+        "label": "Mesej Sistem",
+        "description": "Mesej sistem dihantar sebagai pemberitahuan dalam aplikasi"
+      },
+      "todoTask": {
+        "label": "Tugasan Tertunggak",
+        "description": "Tugasan tertunggak dihantar sebagai pemberitahuan dalam aplikasi"
+      }
+    }
+  },
+  "analytics": {
+    "overview": {
+      "users": {
+        "title": "Pengguna",
+        "totalTitle": "Jumlah Pengguna"
+      },
+      "visits": {
+        "title": "Lawatan",
+        "totalTitle": "Jumlah Lawatan"
+      },
+      "downloads": {
+        "title": "Muat Turun",
+        "totalTitle": "Jumlah Muat Turun"
+      },
+      "usage": {
+        "title": "Penggunaan",
+        "totalTitle": "Jumlah Penggunaan"
+      }
+    },
+    "tabs": {
+      "trends": "Trend Trafik",
+      "visits": "Lawatan Bulanan"
+    },
+    "cards": {
+      "visitsData": "Bilangan Lawatan",
+      "visitsSource": "Sumber Lawatan",
+      "visitsSales": "Sumber Lawatan"
+    },
+    "visits": {
+      "monthLabel": "Bulan {n}"
+    },
+    "visitsData": {
+      "legend": {
+        "visits": "Lawatan",
+        "trend": "Trend"
+      },
+      "indicator": {
+        "web": "Web",
+        "mobile": "Mudah Alih",
+        "client": "Klien",
+        "thirdParty": "Pihak Ketiga",
+        "others": "Lain-lain"
+      },
+      "series": {
+        "visits": "Lawatan",
+        "trend": "Trend"
+      }
+    },
+    "visitsSales": {
+      "outsourcing": "Penyumberan Luar",
+      "customization": "Penyesuaian",
+      "technicalSupport": "Sokongan Teknikal",
+      "remote": "Jarak Jauh",
+      "businessRatio": "Nisbah Perniagaan"
+    },
+    "visitsSource": {
+      "source": {
+        "searchEngine": "Enjin Carian",
+        "directVisit": "Lawatan Langsung",
+        "emailMarketing": "Pemasaran E-mel",
+        "affiliateAd": "Pengiklanan Gabungan"
+      },
+      "seriesName": "Sumber Lawatan"
+    }
+  },
+  "workspace": {
+    "header": {
+      "greeting": "Selamat pagi, {name}, mari mulakan hari anda!",
+      "weather": "Cerah hari ini, 20℃ - 32℃!"
+    },
+    "cards": {
+      "project": "Projek",
+      "latestActivity": "Aktiviti Terkini",
+      "quickNav": "Navigasi Pantas",
+      "todo": "Senarai Tugas",
+      "visitsSource": "Sumber Lawatan"
+    },
+    "projects": {
+      "github": {
+        "content": "Jangan tunggu peluang — ciptalah peluang.",
+        "group": "Kumpulan Sumber Terbuka"
+      },
+      "vue": {
+        "content": "Diri anda sekarang menentukan diri anda pada masa hadapan.",
+        "group": "Kumpulan Algoritma"
+      },
+      "html5": {
+        "content": "Tiada bakat yang lebih penting daripada usaha gigih.",
+        "group": "Buang Masa di Tempat Kerja"
+      },
+      "angular": {
+        "content": "Semangat dan keinginan boleh mengatasi sebarang halangan."
+      },
+      "react": {
+        "content": "Tubuh yang sihat ialah asas untuk mencapai matlamat anda.",
+        "group": "Pakar Teknologi"
+      },
+      "js": {
+        "content": "Jalan dibina dengan melangkah, bukan dengan berangan.",
+        "group": "Kumpulan Seni Bina"
+      }
+    },
+    "quickNav": {
+      "home": "Laman Utama",
+      "dashboard": "Papan Pemuka",
+      "components": "Komponen",
+      "systemManagement": "Pengurusan Sistem",
+      "permissionManagement": "Pengurusan Kebenaran",
+      "charts": "Carta"
+    },
+    "todo": {
+      "reviewFrontendCode": {
+        "title": "Semak Penghantaran Kod Frontend",
+        "content": "Semak kod frontend yang baru dihantar ke repositori Git untuk memastikan kualiti dan standard kod."
+      },
+      "optimizePerformance": {
+        "title": "Pengoptimuman Prestasi Sistem",
+        "content": "Semak dan optimumkan prestasi sistem untuk mengurangkan penggunaan CPU."
+      },
+      "securityCheck": {
+        "title": "Pemeriksaan Keselamatan",
+        "content": "Jalankan pemeriksaan keselamatan sistem untuk memastikan tiada kelemahan atau akses tanpa kebenaran."
+      },
+      "updateDependencies": {
+        "title": "Kemas Kini Kebergantungan Projek",
+        "content": "Kemas kini semua kebergantungan npm dalam projek untuk memastikan versi terkini digunakan."
+      },
+      "fixUiIssue": {
+        "title": "Betulkan Isu Paparan UI",
+        "content": "Betulkan isu paparan UI halaman yang dilaporkan pengguna untuk memastikan paparan konsisten merentas pelayar."
+      }
+    },
+    "trends": {
+      "william": "William",
+      "ewen": "Ewen",
+      "chris": "Chris",
+      "pete": "Pete",
+      "jack": "Jack",
+      "justNow": "Sebentar tadi",
+      "oneHourAgo": "1 jam lalu",
+      "oneDayAgo": "1 hari lalu",
+      "twoDaysAgo": "2 hari lalu",
+      "threeDaysAgo": "3 hari lalu",
+      "oneWeekAgo": "1 minggu lalu",
+      "createdProject": {
+        "content": "mencipta projek <a>Vue</a> dalam <a>Kumpulan Sumber Terbuka</a>"
+      },
+      "followed": {
+        "content": "mengikuti <a>William</a>"
+      },
+      "publishedStatus": {
+        "content": "menerbitkan <a>kemas kini peribadi</a>"
+      },
+      "publishedArticleVite": {
+        "content": "menerbitkan artikel <a>Cara Menulis Pemalam Vite</a>"
+      },
+      "repliedQuestion": {
+        "content": "membalas soalan <a>Jack</a> <a>Bagaimana mengoptimumkan projek?</a>"
+      },
+      "closedIssue": {
+        "content": "menutup isu <a>Cara menjalankan projek</a>"
+      },
+      "pushedCode": {
+        "content": "menolak kod ke <a>Github</a>"
+      },
+      "publishedArticleVben": {
+        "content": "menerbitkan artikel <a>Cara Membina dengan Vben Admin</a>"
+      }
+    }
+  },
+  "notifications": {
+    "items": {
+      "message": "Teks penerangan pemegang tempat",
+      "dayAgo": "1 hari lalu",
+      "weeklyReport": {
+        "title": "Menerima 14 laporan mingguan baharu",
+        "date": "3 jam lalu"
+      },
+      "reply": {
+        "title": "Sarah membalas anda",
+        "date": "Sebentar tadi"
+      },
+      "comment": {
+        "title": "Daniel mengulas hantaran anda"
+      },
+      "todo": {
+        "title": "Peringatan tugasan"
+      },
+      "workspaceLink": {
+        "title": "Contoh lompat ke Ruang Kerja"
+      },
+      "externalLink": {
+        "title": "Contoh buka pautan luar"
+      }
+    }
+  }
+}

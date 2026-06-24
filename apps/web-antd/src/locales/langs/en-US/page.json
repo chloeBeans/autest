@@ -11,5 +11,277 @@
     "title": "Dashboard",
     "analytics": "Analytics",
     "workspace": "Workspace"
+  },
+  "profile": {
+    "title": "Profile",
+    "tabs": {
+      "basic": "Basic Settings",
+      "security": "Security Settings",
+      "password": "Change Password",
+      "notice": "Message Notifications"
+    },
+    "base": {
+      "roles": {
+        "admin": "Administrator",
+        "user": "User",
+        "test": "Test"
+      },
+      "fields": {
+        "realName": "Name",
+        "username": "Username",
+        "roles": "Roles",
+        "introduction": "Bio"
+      }
+    },
+    "security": {
+      "accountPassword": {
+        "label": "Account Password",
+        "description": "Current password strength: Strong"
+      },
+      "securityPhone": {
+        "label": "Security Phone",
+        "description": "Bound phone: 138****8293"
+      },
+      "securityQuestion": {
+        "label": "Security Question",
+        "description": "No security question set. Security questions effectively protect your account."
+      },
+      "securityEmail": {
+        "label": "Backup Email",
+        "description": "Bound email: ant***sign.com"
+      },
+      "securityMfa": {
+        "label": "MFA Device",
+        "description": "No MFA device bound. Once bound, you can use two-factor verification."
+      }
+    },
+    "password": {
+      "oldPassword": {
+        "label": "Old Password",
+        "placeholder": "Please enter your old password"
+      },
+      "newPassword": {
+        "label": "New Password",
+        "placeholder": "Please enter your new password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Please enter your new password again",
+        "requiredError": "Please enter your new password again",
+        "minError": "Please enter your new password again",
+        "mismatch": "The two passwords do not match"
+      },
+      "submitSuccess": "Password changed successfully"
+    },
+    "notice": {
+      "accountPassword": {
+        "label": "Account Messages",
+        "description": "Messages from other users are delivered as in-app notifications"
+      },
+      "systemMessage": {
+        "label": "System Messages",
+        "description": "System messages are delivered as in-app notifications"
+      },
+      "todoTask": {
+        "label": "To-do Tasks",
+        "description": "To-do tasks are delivered as in-app notifications"
+      }
+    }
+  },
+  "analytics": {
+    "overview": {
+      "users": {
+        "title": "Users",
+        "totalTitle": "Total Users"
+      },
+      "visits": {
+        "title": "Visits",
+        "totalTitle": "Total Visits"
+      },
+      "downloads": {
+        "title": "Downloads",
+        "totalTitle": "Total Downloads"
+      },
+      "usage": {
+        "title": "Usage",
+        "totalTitle": "Total Usage"
+      }
+    },
+    "tabs": {
+      "trends": "Traffic Trends",
+      "visits": "Monthly Visits"
+    },
+    "cards": {
+      "visitsData": "Visit Count",
+      "visitsSource": "Visit Source",
+      "visitsSales": "Visit Source"
+    },
+    "visits": {
+      "monthLabel": "Month {n}"
+    },
+    "visitsData": {
+      "legend": {
+        "visits": "Visits",
+        "trend": "Trend"
+      },
+      "indicator": {
+        "web": "Web",
+        "mobile": "Mobile",
+        "client": "Client",
+        "thirdParty": "Third-party",
+        "others": "Others"
+      },
+      "series": {
+        "visits": "Visits",
+        "trend": "Trend"
+      }
+    },
+    "visitsSales": {
+      "outsourcing": "Outsourcing",
+      "customization": "Customization",
+      "technicalSupport": "Technical Support",
+      "remote": "Remote",
+      "businessRatio": "Business Ratio"
+    },
+    "visitsSource": {
+      "source": {
+        "searchEngine": "Search Engine",
+        "directVisit": "Direct Visit",
+        "emailMarketing": "Email Marketing",
+        "affiliateAd": "Affiliate Advertising"
+      },
+      "seriesName": "Visit Source"
+    }
+  },
+  "workspace": {
+    "header": {
+      "greeting": "Good morning, {name}, let's start your day!",
+      "weather": "Sunny today, 20℃ - 32℃!"
+    },
+    "cards": {
+      "project": "Projects",
+      "latestActivity": "Latest Activity",
+      "quickNav": "Quick Navigation",
+      "todo": "To-Do",
+      "visitsSource": "Visit Source"
+    },
+    "projects": {
+      "github": {
+        "content": "Don't wait for opportunities — create them.",
+        "group": "Open Source Group"
+      },
+      "vue": {
+        "content": "Who you are now determines who you will become.",
+        "group": "Algorithm Group"
+      },
+      "html5": {
+        "content": "No talent is more important than hard work.",
+        "group": "Slacking at Work"
+      },
+      "angular": {
+        "content": "Passion and desire can overcome any obstacle."
+      },
+      "react": {
+        "content": "A healthy body is the cornerstone of achieving your goals.",
+        "group": "Tech Wizards"
+      },
+      "js": {
+        "content": "Roads are made by walking, not by daydreaming.",
+        "group": "Architecture Group"
+      }
+    },
+    "quickNav": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "components": "Components",
+      "systemManagement": "System Management",
+      "permissionManagement": "Permission Management",
+      "charts": "Charts"
+    },
+    "todo": {
+      "reviewFrontendCode": {
+        "title": "Review Frontend Code Commits",
+        "content": "Review the frontend code recently committed to the Git repository to ensure code quality and standards."
+      },
+      "optimizePerformance": {
+        "title": "System Performance Optimization",
+        "content": "Check and optimize system performance to reduce CPU usage."
+      },
+      "securityCheck": {
+        "title": "Security Check",
+        "content": "Run a system security check to ensure there are no vulnerabilities or unauthorized access."
+      },
+      "updateDependencies": {
+        "title": "Update Project Dependencies",
+        "content": "Update all npm dependencies in the project to ensure the latest versions are used."
+      },
+      "fixUiIssue": {
+        "title": "Fix UI Display Issues",
+        "content": "Fix the page UI display issues reported by users to ensure consistent rendering across browsers."
+      }
+    },
+    "trends": {
+      "william": "William",
+      "ewen": "Ewen",
+      "chris": "Chris",
+      "pete": "Pete",
+      "jack": "Jack",
+      "justNow": "Just now",
+      "oneHourAgo": "1 hour ago",
+      "oneDayAgo": "1 day ago",
+      "twoDaysAgo": "2 days ago",
+      "threeDaysAgo": "3 days ago",
+      "oneWeekAgo": "1 week ago",
+      "createdProject": {
+        "content": "created the project <a>Vue</a> in <a>Open Source Group</a>"
+      },
+      "followed": {
+        "content": "followed <a>William</a>"
+      },
+      "publishedStatus": {
+        "content": "published a <a>personal update</a>"
+      },
+      "publishedArticleVite": {
+        "content": "published an article <a>How to Write a Vite Plugin</a>"
+      },
+      "repliedQuestion": {
+        "content": "replied to <a>Jack</a>'s question <a>How to optimize a project?</a>"
+      },
+      "closedIssue": {
+        "content": "closed the issue <a>How to run the project</a>"
+      },
+      "pushedCode": {
+        "content": "pushed code to <a>Github</a>"
+      },
+      "publishedArticleVben": {
+        "content": "published an article <a>How to Build with Vben Admin</a>"
+      }
+    }
+  },
+  "notifications": {
+    "items": {
+      "message": "Placeholder description text",
+      "dayAgo": "1 day ago",
+      "weeklyReport": {
+        "title": "Received 14 new weekly reports",
+        "date": "3 hours ago"
+      },
+      "reply": {
+        "title": "Sarah replied to you",
+        "date": "Just now"
+      },
+      "comment": {
+        "title": "Daniel commented on your post"
+      },
+      "todo": {
+        "title": "To-do reminder"
+      },
+      "workspaceLink": {
+        "title": "Jump to Workspace example"
+      },
+      "externalLink": {
+        "title": "Open external link example"
+      }
+    }
   }
 }

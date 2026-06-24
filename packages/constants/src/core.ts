@@ -16,19 +16,21 @@ export const DEFAULT_HOME_PATH = '/autest/dashboard';
 
 export interface LanguageOption {
   label: string;
-  value: 'en-US' | 'zh-CN';
+  value: 'en-US' | 'ms-MY' | 'zh-CN';
 }
 
 /**
  * Supported languages
+ * @remarks zh-CN locale files are kept for the framework but intentionally
+ * omitted here so only English and Bahasa Melayu appear in the switcher.
  */
 export const SUPPORT_LANGUAGES: LanguageOption[] = [
   {
-    label: '简体中文',
-    value: 'zh-CN',
-  },
-  {
     label: 'English',
     value: 'en-US',
+  },
+  {
+    label: 'Bahasa Melayu',
+    value: 'ms-MY',
   },
 ];

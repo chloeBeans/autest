@@ -1,0 +1,121 @@
+{
+  "formRules": {
+    "required": "Sila masukkan {0}",
+    "selectRequired": "Sila pilih {0}",
+    "minLength": "{0} mestilah sekurang-kurangnya {1} aksara",
+    "maxLength": "{0} boleh menjadi paling banyak {1} aksara",
+    "length": "{0} mestilah sepanjang {1} aksara",
+    "alreadyExists": "{0} `{1}` sudah wujud",
+    "startWith": "{0} mesti bermula dengan `{1}`",
+    "invalidURL": "Sila masukkan URL yang sah",
+    "sizeLimit": "Saiz fail tidak boleh melebihi {0}MB",
+    "previewWarning": "Tidak dapat membuka fail, tiada URL atau alamat pratonton tersedia"
+  },
+  "actionTitle": {
+    "edit": "Sunting {0}",
+    "create": "Cipta {0}",
+    "delete": "Padam {0}",
+    "view": "Lihat {0}"
+  },
+  "actionMessage": {
+    "deleteConfirm": "Adakah anda pasti mahu memadam {0}?",
+    "deleting": "Memadam {0} ...",
+    "deleteSuccess": "{0} berjaya dipadam",
+    "operationSuccess": "Operasi berjaya",
+    "operationFailed": "Operasi gagal"
+  },
+  "placeholder": {
+    "input": "Sila masukkan",
+    "select": "Sila pilih",
+    "upload": "Klik untuk memuat naik"
+  },
+  "captcha": {
+    "title": "Sila lengkapkan pengesahan keselamatan",
+    "sliderSuccessText": "Lulus",
+    "sliderDefaultText": "Luncur dan seret",
+    "alt": "Menyokong nilai atribut src tag img",
+    "sliderRotateDefaultTip": "Klik gambar untuk muat semula",
+    "sliderTranslateDefaultTip": "Klik gambar untuk muat semula",
+    "sliderRotateFailTip": "Pengesahan gagal",
+    "sliderRotateSuccessTip": "Pengesahan berjaya, masa {0} saat",
+    "sliderTranslateFailTip": "Pengesahan gagal",
+    "sliderTranslateSuccessTip": "Pengesahan berjaya, masa {0} saat",
+    "refreshAriaLabel": "Muat semula captcha",
+    "confirmAriaLabel": "Sahkan pilihan",
+    "confirm": "Sahkan",
+    "pointAriaLabel": "Klik titik",
+    "clickInOrder": "Sila klik mengikut susunan"
+  },
+  "iconPicker": {
+    "placeholder": "Pilih satu ikon",
+    "search": "Cari ikon..."
+  },
+  "jsonViewer": {
+    "copy": "Salin",
+    "copied": "Disalin"
+  },
+  "crop": {
+    "title": "Pemangkasan Imej",
+    "titleTip": "Nisbah Pemangkasan {0}",
+    "confirm": "Pangkas",
+    "cancel": "Batal pemangkasan",
+    "errorTip": "Ralat pemangkasan"
+  },
+  "fallback": {
+    "pageNotFound": "Alamak! Halaman Tidak Ditemui",
+    "pageNotFoundDesc": "Maaf, kami tidak dapat menemui halaman yang anda cari.",
+    "forbidden": "Alamak! Akses Dinafikan",
+    "forbiddenDesc": "Maaf, tetapi anda tidak mempunyai kebenaran untuk mengakses halaman ini.",
+    "internalError": "Alamak! Sesuatu Telah Berlaku",
+    "internalErrorDesc": "Maaf, tetapi pelayan menemui ralat.",
+    "offline": "Halaman Luar Talian",
+    "offlineError": "Alamak! Ralat Rangkaian",
+    "offlineErrorDesc": "Maaf, tidak dapat menyambung ke internet. Sila semak sambungan anda.",
+    "comingSoon": "Akan Datang",
+    "http": {
+      "requestTimeout": "Permintaan telah tamat masa. Sila cuba lagi kemudian.",
+      "networkError": "Ralat rangkaian telah berlaku. Sila semak sambungan internet anda dan cuba lagi.",
+      "badRequest": "Permintaan Tidak Sah. Sila semak input anda dan cuba lagi.",
+      "unauthorized": "Tidak Dibenarkan. Sila log masuk untuk meneruskan.",
+      "forbidden": "Dilarang. Anda tidak mempunyai kebenaran untuk mengakses sumber ini.",
+      "notFound": "Tidak Ditemui. Sumber yang diminta tidak dapat ditemui.",
+      "internalServerError": "Ralat Pelayan Dalaman. Sesuatu telah berlaku di pihak kami. Sila cuba lagi kemudian."
+    }
+  },
+  "widgets": {
+    "document": "Dokumen",
+    "qa": "Q&A",
+    "setting": "Tetapan",
+    "logoutTip": "Adakah anda mahu log keluar?",
+    "viewAll": "Lihat Semua Mesej",
+    "notifications": "Pemberitahuan",
+    "markAllAsRead": "Tandakan Semua sebagai Dibaca",
+    "clearNotifications": "Kosongkan",
+    "checkUpdatesTitle": "Versi Baharu Tersedia",
+    "checkUpdatesDescription": "Klik untuk muat semula dan dapatkan versi terkini",
+    "search": {
+      "title": "Cari",
+      "searchNavigate": "Cari Navigasi",
+      "select": "Pilih",
+      "navigate": "Navigasi",
+      "close": "Tutup",
+      "noResults": "Tiada Hasil Carian Ditemui",
+      "noRecent": "Tiada Sejarah Carian",
+      "recent": "Sejarah Carian"
+    },
+    "lockScreen": {
+      "title": "Kunci Skrin",
+      "screenButton": "Mengunci",
+      "password": "Kata Laluan",
+      "placeholder": "Sila masukkan kata laluan",
+      "unlock": "Klik untuk membuka kunci",
+      "errorPasswordTip": "Kata laluan salah, sila masukkan semula",
+      "backToLogin": "Kembali ke log masuk",
+      "entry": "Masuk ke sistem"
+    },
+    "timezone": {
+      "setTimezone": "Tetapkan Zon Waktu",
+      "setSuccess": "Zon waktu berjaya ditetapkan"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Demos",
+  "antd": "Ant Design Vue",
+  "vben": {
+    "title": "Projek",
+    "about": "Perihal",
+    "document": "Dokumen",
+    "antdv": "Versi Ant Design Vue",
+    "antdv-next": "Versi Antdv Next",
+    "naive-ui": "Versi Naive UI",
+    "element-plus": "Versi Element Plus",
+    "tdesign": "Versi TDesign Vue"
+  }
+}

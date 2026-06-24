@@ -5,8 +5,7 @@ import type { Account } from '#/types/domain';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { LOGIN_PATH } from '@vben/constants';
-import { preferences } from '@vben/preferences';
+import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { useAccessStore, useUserStore } from '@vben/stores';
 
 import { notification } from 'ant-design-vue';
@@ -38,7 +37,7 @@ export const useAuthStore = defineStore(
       return {
         avatar: '',
         desc: '',
-        homePath: account.homePath || preferences.app.defaultHomePath,
+        homePath: account.homePath || DEFAULT_HOME_PATH,
         realName: account.realName,
         roles: account.roles,
         token: `mock-${account.username}`,
@@ -73,9 +72,7 @@ export const useAuthStore = defineStore(
         } else {
           onSuccess
             ? await onSuccess?.()
-            : await router.push(
-                userInfo.homePath || preferences.app.defaultHomePath,
-              );
+            : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
         }
 
         if (userInfo?.realName) {

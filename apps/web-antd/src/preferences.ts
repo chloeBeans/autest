@@ -1,3 +1,4 @@
+import { DEFAULT_HOME_PATH } from '@vben/constants';
 import { defineOverridesPreferences } from '@vben/preferences';
 
 /**
@@ -9,6 +10,10 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     name: import.meta.env.VITE_APP_TITLE,
+    // Land users on the Autest dashboard after login; the framework default is
+    // the Vben "/analytics" demo page. The router/auth code reads DEFAULT_HOME_PATH
+    // directly (see @vben/constants) so a stale cached preference can't override it.
+    defaultHomePath: DEFAULT_HOME_PATH,
     locale: 'en-US',
   },
   logo: {

@@ -13,9 +13,13 @@ and AI assistants alike). They are committed so each clone gets them. The
 2. **After the user checks**, the commit message is written (using the format the
    user provides — until then, propose a recommended message) and the commit is
    made only on the user's go-ahead.
-3. **The assistant never pushes.** `git push` is blocked by the committed
+3. **Always ask the commit scope.** Before proposing a commit message (and
+   scoping `git add`), ask the user whether it should cover **only the files
+   changed in this session** or **all changed files** in the working tree. Do
+   not assume a default.
+4. **The assistant never pushes.** `git push` is blocked by the committed
    PreToolUse hook. Only a human pushes.
-4. On completing any change, **write a recommended commit message** and
+5. On completing any change, **write a recommended commit message** and
    **remind the user to review before committing and pushing.**
 
 ## No assumptions (hard rule)

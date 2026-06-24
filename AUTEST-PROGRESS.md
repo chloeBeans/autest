@@ -53,20 +53,21 @@ pnpm exec eslint "src/views/autest/**/*.vue" "src/router/routes/modules/autest.t
     and `autest.record` (showSnippet/dragHint). Adversarially reviewed (clipboard error handling +
     editor auto-grow) and verified.
 
+- **Topbar project switcher + login auto-select** — `components/project-switcher.vue`
+  (borderless Ant `Select` of `projectStore.myProjects` → `selectProject`; hidden when the
+  user has no projects), mounted in `layouts/basic.vue` via the `#header-right-1` slot.
+  `auth.ts` calls `projectStore.ensureValidSelection()` after `setUserInfo` in both
+  `authLogin` and `fetchUserInfo`, so a user lands on a project they belong to (no longer
+  pinned to the seeded `proj_icoms`). Adversarially reviewed (antdv-4 `:bordered="false"`,
+  no store cycle, lifecycle hooks) and verified.
+
 All of the above: **typecheck ✅ · eslint ✅**.
 
 ---
 
 ## 🔜 Next steps (in order)
 
-### 1. Topbar project switcher + selection on login
-- Add a switcher (dropdown of `projectStore.myProjects`) into the Vben layout header
-  (header slot/widget) to set `projectStore.currentProjectId` via `selectProject`.
-- Call `projectStore.ensureValidSelection()` after login — hook into `auth.ts`
-  `fetchUserInfo()` (or a router guard) so a user lands on a project they belong to.
-  Currently `currentProjectId` is fixed to the seeded `proj_icoms`.
-
-### 2. (Optional) Generate-test confidence flow
+### 1. (Optional) Generate-test confidence flow
 Old version had an analyze step (confidence high → commit-mock, low → Notes/Doubts).
 Not ported. Bugs "Generate test" currently builds a spec from the template directly.
 If wanted, add an analyze modal + wire `bug.confidence` / `bug.note`.
@@ -92,6 +93,13 @@ If wanted, add an analyze modal + wire `bug.confidence` / `bug.note`.
 - **Ant Select with a union-typed model**: bind `:value` + `@change` (handler casts),
   not `v-model:value` — `v-model` writes the wide `SelectValue` back into the narrow
   union and vue-tsc errors. Plain `string`/`string[]` refs are fine with `v-model:value`.
+  `SelectValue` excludes `null` — bind `:value="x ?? undefined"` for `string | null` refs.
+- **antdv is pinned to 4.2.6, not 5.x**: use `:bordered="false"` for a borderless Select,
+  **not** `variant="borderless"` (5.x only — in 4.2.6 it silently falls through as a no-op
+  DOM attr and vue-tsc won't catch it). Verify component APIs against 4.2.x, not current docs.
+- **Vben header widgets**: add header content from `layouts/basic.vue` with a
+  `#header-right-<N>` (or `#header-left-<N>`) slot — the layout forwards any `header-*`
+  slot and the header sorts right-side items by `<N>` (built-ins live at 50–150).
 - **IDE false positives**: editor may show `Cannot find module '#/...'`. Ignore — the
   CLI `pnpm typecheck` (vue-tsc) resolves the `#/*` path map (= `apps/web-antd/src`).
   `@vben/*` = workspace packages.

@@ -14,6 +14,7 @@ import { defineStore } from 'pinia';
 
 import { $t } from '#/locales';
 import { useAccountStore } from '#/store/accounts';
+import { useProjectStore } from '#/store/projects';
 
 /**
  * Auth store — fully client-side (no backend). Validates credentials against the
@@ -26,6 +27,7 @@ export const useAuthStore = defineStore(
     const accessStore = useAccessStore();
     const userStore = useUserStore();
     const accountStore = useAccountStore();
+    const projectStore = useProjectStore();
     const router = useRouter();
 
     const loginLoading = ref(false);
@@ -63,6 +65,8 @@ export const useAuthStore = defineStore(
         userInfo = toUserInfo(account);
         userStore.setUserInfo(userInfo);
         accessStore.setAccessCodes(account.roles);
+        // Land the user on a project they belong to (was fixed to the seed).
+        projectStore.ensureValidSelection();
 
         if (accessStore.loginExpired) {
           accessStore.setLoginExpired(false);
@@ -113,6 +117,8 @@ export const useAuthStore = defineStore(
       }
       const userInfo = toUserInfo(account);
       userStore.setUserInfo(userInfo);
+      // Keep the persisted project selection valid for this user on refresh.
+      projectStore.ensureValidSelection();
       return userInfo;
     }
 

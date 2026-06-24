@@ -1,8 +1,11 @@
 # Module: Projects & membership
 
-**Store:** `src/store/projects.js` ·
-**Switcher:** `src/components/layout/ProjectSwitcher.vue` ·
-**Admin UI:** `src/views/SettingsView.vue`
+**Store:** `apps/web-antd/src/store/projects.ts` ·
+**Switcher:** `apps/web-antd/src/components/project-switcher.vue`
+(mounted in `apps/web-antd/src/layouts/basic.vue` via the `#header-right-1` slot) ·
+**Login auto-select:** `apps/web-antd/src/store/auth.ts` calls
+`projectStore.ensureValidSelection()` after `setUserInfo` in `authLogin` + `fetchUserInfo` ·
+**Admin UI:** `apps/web-antd/src/views/autest/setup/index.vue`
 
 ## Purpose
 Everything (bugs, tests, BRS, portal folders) is scoped to a project. Users work

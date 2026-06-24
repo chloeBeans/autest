@@ -2,7 +2,7 @@
 import type { SupportedLanguagesType } from '@vben/locales';
 
 import { SUPPORT_LANGUAGES } from '@vben/constants';
-import { Languages } from '@vben/icons';
+import { Globe } from '@vben/icons';
 import { loadLocaleMessages } from '@vben/locales';
 import { preferences, updatePreferences } from '@vben/preferences';
 
@@ -32,7 +32,7 @@ async function handleUpdate(value: string | undefined) {
       @update:model-value="handleUpdate"
     >
       <VbenIconButton class="hover:animate-[shrink_0.3s_ease-in-out]">
-        <Languages class="text-foreground size-4" />
+        <Globe class="text-foreground size-4" />
       </VbenIconButton>
     </VbenDropdownRadioMenu>
   </div>

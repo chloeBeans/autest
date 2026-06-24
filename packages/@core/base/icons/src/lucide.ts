@@ -29,6 +29,7 @@ export {
   FoldHorizontal,
   Fullscreen,
   Github,
+  Globe,
   Grip,
   GripVertical,
   Menu as IconDefault,

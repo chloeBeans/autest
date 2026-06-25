@@ -1,11 +1,13 @@
 <script lang="ts" setup>
+import type { Bug } from '#/types/domain';
+
 import { computed, reactive } from 'vue';
 
 import { Form, FormItem, Input, Modal, Select, Textarea } from 'ant-design-vue';
 
 import { $t } from '#/locales';
 import { useBugStore } from '#/store/bugs';
-import { ENV_OPTIONS, PORTAL_OPTIONS } from '#/utils/constants';
+import { BUG_FIELDS } from '#/utils/constants';
 import { toast } from '#/utils/toast';
 
 const props = defineProps<{ open: boolean }>();
@@ -17,28 +19,31 @@ const visible = computed({
 });
 
 const bugStore = useBugStore();
-const form = reactive({
-  id: '',
-  portal: 'external',
-  env: 'dev',
-  description: '',
-});
+
+function emptyForm(): Record<string, string> {
+  const form: Record<string, string> = {};
+  BUG_FIELDS.forEach((f) => {
+    form[f.key] = '';
+  });
+  return form;
+}
+const form = reactive<Record<string, string>>(emptyForm());
 
 function submit() {
-  if (!form.description.trim()) {
+  if (!form.description?.trim()) {
     toast.error('Issue description is required');
     return;
   }
-  bugStore.addBug({
-    id: form.id.trim() || `BUG-${Date.now().toString().slice(-5)}`,
-    portal: form.portal,
-    env: form.env,
-    description: form.description.trim(),
-    raw: {},
+  const bug = { raw: {} } as Bug;
+  const writable = bug as unknown as Record<string, unknown>;
+  BUG_FIELDS.forEach((f) => {
+    writable[f.key] = (form[f.key] ?? '').trim();
   });
+  if (!bug.logId) bug.logId = `BUG-${Date.now().toString().slice(-5)}`;
+
+  bugStore.addBug(bug);
   toast.success('Bug added');
-  form.id = '';
-  form.description = '';
+  Object.assign(form, emptyForm());
   visible.value = false;
 }
 </script>
@@ -48,23 +53,31 @@ function submit() {
     v-model:open="visible"
     :title="$t('autest.bugs.addBug')"
     :ok-text="$t('autest.general.save')"
+    width="900px"
     @ok="submit"
   >
     <Form layout="vertical">
       <div class="grid">
-        <FormItem :label="$t('autest.bugs.id')">
-          <Input v-model:value="form.id" placeholder="auto" />
-        </FormItem>
-        <FormItem :label="$t('autest.bugs.portal')">
-          <Select v-model:value="form.portal" :options="PORTAL_OPTIONS" />
-        </FormItem>
-        <FormItem label="Env">
-          <Select v-model:value="form.env" :options="ENV_OPTIONS" />
+        <FormItem
+          v-for="f in BUG_FIELDS"
+          :key="f.key"
+          :label="$t(`autest.bugs.fields.${f.key}`)"
+          :class="{ full: f.kind === 'textarea' }"
+        >
+          <Select
+            v-if="f.kind === 'select'"
+            v-model:value="form[f.key]"
+            :options="f.options"
+            allow-clear
+          />
+          <Textarea
+            v-else-if="f.kind === 'textarea'"
+            v-model:value="form[f.key]"
+            :rows="3"
+          />
+          <Input v-else v-model:value="form[f.key]" />
         </FormItem>
       </div>
-      <FormItem :label="$t('autest.bugs.description')">
-        <Textarea v-model:value="form.description" :rows="4" />
-      </FormItem>
     </Form>
   </Modal>
 </template>
@@ -73,6 +86,9 @@ function submit() {
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
+  gap: 8px 16px;
+}
+.full {
+  grid-column: 1 / -1;
 }
 </style>

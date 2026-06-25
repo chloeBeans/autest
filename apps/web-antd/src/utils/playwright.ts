@@ -7,8 +7,8 @@ import { escapeJsString, shortTitle, slugify } from './format';
  * Returns { fileName, content }.
  */
 export function buildTestFromBug(bug: Partial<Bug> = {}): SpecFile {
-  const id = bug.id || 'BUG';
-  const portal = bug.portal || 'portal';
+  const id = bug.logId || 'BUG';
+  const portal = bug.portion || 'portal';
   const description = bug.description || '';
   const title = shortTitle(description) || `${id} regression`;
 
@@ -114,8 +114,8 @@ export function buildPrompt(bug: Partial<Bug> = {}): string {
   return [
     `Write a Playwright test (JavaScript) that reproduces and verifies the fix for this bug.`,
     ``,
-    `Bug ID: ${bug.id || 'N/A'}`,
-    `Portal: ${bug.portal || 'N/A'}`,
+    `Bug ID: ${bug.logId || 'N/A'}`,
+    `Portal: ${bug.portion || 'N/A'}`,
     `Issue Description:`,
     bug.description || '(none)',
     ``,

@@ -2,212 +2,161 @@
 import type { TableColumnsType } from 'ant-design-vue';
 
 import type { BugRecord } from '#/types/domain';
+import type { Option } from '#/utils/constants';
 
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 import { Page } from '@vben/common-ui';
-import { useUserStore } from '@vben/stores';
 
-import {
-  Button,
-  Input,
-  Segmented,
-  Select,
-  Space,
-  Table,
-  Tag,
-} from 'ant-design-vue';
+import { Button, Input, Select, Space, Table, Tag } from 'ant-design-vue';
 
 import { $t } from '#/locales';
 import { useBugStore } from '#/store/bugs';
-import { useFolderStore } from '#/store/folders';
-import {
-  BUG_STATUS,
-  CONFIDENCE,
-  CONFIDENCE_OPTIONS,
-  ENV_OPTIONS,
-  PORTAL_OPTIONS,
-  STATUS_OPTIONS,
-} from '#/utils/constants';
-import { downloadTextFile, writeFile } from '#/utils/fileSystem';
-import { buildTestFromBug } from '#/utils/playwright';
+import { BUG_FIELDS, BUG_STATUS, DEV_STATUS } from '#/utils/constants';
 import { toast } from '#/utils/toast';
 
 import AddBugModal from './components/add-bug-modal.vue';
 import ImportModal from './components/import-modal.vue';
 
 const bugStore = useBugStore();
-const folderStore = useFolderStore();
-const userStore = useUserStore();
 
-const portalTab = ref('all');
+const portionTab = ref('all');
 const envTab = ref('all');
 const search = ref('');
 const addOpen = ref(false);
 const importOpen = ref(false);
 
-const portalOptions = computed(() => [
-  {
-    label: `${$t('autest.general.all')} (${bugStore.counts.all})`,
-    value: 'all',
-  },
-  {
-    label: `${$t('autest.general.external')} (${bugStore.counts.external})`,
-    value: 'external',
-  },
-  {
-    label: `${$t('autest.general.internal')} (${bugStore.counts.internal})`,
-    value: 'internal',
-  },
-]);
-const envOptions = computed(() => [
-  { label: `All (${bugStore.envCounts.all})`, value: 'all' },
-  { label: `DEV (${bugStore.envCounts.dev})`, value: 'dev' },
-  { label: `SIT (${bugStore.envCounts.sit})`, value: 'sit' },
-  { label: `UAT (${bugStore.envCounts.uat})`, value: 'uat' },
-]);
+// Select fields get a dropdown when editing; everything else is a text input.
+// Options come straight off the single source of truth in BUG_FIELDS.
+function fieldOptions(key: string): Option[] | undefined {
+  return BUG_FIELDS.find((f) => f.key === key)?.options;
+}
+function isSelect(key: string) {
+  return fieldOptions(key) !== undefined;
+}
+
+// Filter dropdowns are built from the Portion/ENV values present in the data.
+function distinctOptions(pick: (b: BugRecord) => string) {
+  const set = new Set<string>();
+  bugStore.bugs.forEach((b) => {
+    const v = pick(b);
+    if (v) set.add(v);
+  });
+  return [
+    { label: $t('autest.general.all'), value: 'all' },
+    ...[...set].map((v) => ({ label: v, value: v })),
+  ];
+}
+const portionOptions = computed(() => distinctOptions((b) => b.portion));
+const envFilterOptions = computed(() => distinctOptions((b) => b.env));
+
+// If the selected filter value disappears from the data, fall back to 'all'.
+watch(portionOptions, (opts) => {
+  if (!opts.some((o) => o.value === portionTab.value)) portionTab.value = 'all';
+});
+watch(envFilterOptions, (opts) => {
+  if (!opts.some((o) => o.value === envTab.value)) envTab.value = 'all';
+});
 
 const rows = computed(() => {
-  const list = bugStore.filtered(portalTab.value, envTab.value);
+  const list = bugStore.filtered(portionTab.value, envTab.value);
   const q = search.value.trim().toLowerCase();
   if (!q) return list;
+  const has = (v: unknown) =>
+    String(v ?? '')
+      .toLowerCase()
+      .includes(q);
   return list.filter(
-    (b) =>
-      b.id.toLowerCase().includes(q) || b.description.toLowerCase().includes(q),
+    (b) => has(b.logId) || has(b.description) || has(b.no) || has(b.module),
   );
 });
 
-const columns: TableColumnsType = [
-  { title: $t('autest.bugs.id'), dataIndex: 'id', key: 'id', width: 110 },
-  {
-    title: $t('autest.bugs.portal'),
-    dataIndex: 'portal',
-    key: 'portal',
-    width: 110,
-  },
-  { title: 'Env', dataIndex: 'env', key: 'env', width: 80 },
-  {
-    title: $t('autest.bugs.description'),
-    dataIndex: 'description',
-    key: 'description',
-    ellipsis: true,
-  },
-  {
-    title: $t('autest.bugs.status'),
-    dataIndex: 'status',
-    key: 'status',
-    width: 130,
-  },
-  {
-    title: $t('autest.bugs.confidence'),
-    dataIndex: 'confidence',
-    key: 'confidence',
-    width: 120,
-  },
-  {
-    title: $t('autest.bugs.pickedUpBy'),
-    dataIndex: 'pickedUpBy',
-    key: 'pickedUpBy',
-    width: 140,
-  },
+const columns = computed<TableColumnsType>(() => [
+  ...BUG_FIELDS.map((f) => ({
+    title: $t(`autest.bugs.fields.${f.key}`),
+    dataIndex: f.key,
+    key: f.key,
+    width: f.width,
+    ...(f.kind === 'textarea' ? { ellipsis: true } : {}),
+  })),
   {
     title: $t('autest.bugs.actions'),
     key: 'actions',
-    width: 260,
+    width: 150,
     fixed: 'right',
   },
-];
+]);
+
+const tableScrollX = computed(
+  () => BUG_FIELDS.reduce((sum, f) => sum + f.width, 0) + 150,
+);
 
 const statusColor: Record<string, string> = {
-  [BUG_STATUS.NEW]: 'default',
-  [BUG_STATUS.ANALYZED]: 'blue',
-  [BUG_STATUS.GENERATED]: 'gold',
-  [BUG_STATUS.COMMITTED]: 'green',
-  [BUG_STATUS.NEEDS_REVIEW]: 'red',
+  [BUG_STATUS.OPEN]: 'red',
+  [BUG_STATUS.RETEST]: 'gold',
+  [BUG_STATUS.CLOSED]: 'green',
+  [BUG_STATUS.REOPEN]: 'volcano',
+  [BUG_STATUS.INVALID]: 'default',
+};
+const devStatusColor: Record<string, string> = {
+  [DEV_STATUS.IN_PROGRESS]: 'blue',
+  [DEV_STATUS.FIXED_IN_LOCAL_ENV]: 'gold',
+  [DEV_STATUS.DEPLOYED_TO_PRE_SIT]: 'green',
 };
 
 function rowKey(record: BugRecord) {
   return record.key;
 }
+function val(record: BugRecord, key: string) {
+  return (record as unknown as Record<string, unknown>)[key] ?? '';
+}
 
 // --- Inline row editing ---------------------------------------------------
 const editingKey = ref('');
-const draft = reactive({
-  id: '',
-  portal: '' as string,
-  env: '' as string,
-  description: '',
-  status: BUG_STATUS.NEW as BugRecord['status'],
-  confidence: CONFIDENCE.UNKNOWN as BugRecord['confidence'],
-});
+const draft = reactive<Record<string, string>>({});
 
 function isEditing(record: BugRecord) {
   return editingKey.value === record.key;
 }
-
 function startEdit(record: BugRecord) {
   editingKey.value = record.key;
-  draft.id = record.id;
-  draft.portal = record.portal;
-  draft.env = record.env;
-  draft.description = record.description;
-  draft.status = record.status;
-  draft.confidence = record.confidence;
+  BUG_FIELDS.forEach((f) => {
+    draft[f.key] = String(val(record, f.key));
+  });
 }
-
 function cancelEdit() {
   editingKey.value = '';
 }
-
 function saveEdit(record: BugRecord) {
-  if (!draft.description.trim()) {
+  if (!String(draft.description ?? '').trim()) {
     toast.error('Issue description is required');
     return;
   }
-  const id = draft.id.trim() || record.id;
-  bugStore.updateBug(record.key, {
-    id,
-    portal: draft.portal,
-    env: draft.env,
-    description: draft.description.trim(),
-    status: draft.status,
-    confidence: draft.confidence,
+  const patch: Record<string, string> = {};
+  BUG_FIELDS.forEach((f) => {
+    patch[f.key] = String(draft[f.key] ?? '').trim();
   });
+  bugStore.updateBug(record.key, patch);
   editingKey.value = '';
-  toast.success(`${id} updated`);
-}
-
-function pickUp(record: BugRecord) {
-  bugStore.pickUp(record.key, userStore.userInfo?.username ?? '');
-  toast.success(`${record.id} picked up`);
-}
-
-async function generate(record: BugRecord) {
-  const spec = buildTestFromBug(record);
-  const handle = folderStore.handleFor(record.portal);
-  try {
-    if (handle) {
-      await writeFile(handle, 'tests', spec.fileName, spec.content);
-      bugStore.updateBug(record.key, {
-        status: BUG_STATUS.GENERATED,
-        generatedFile: spec.fileName,
-      });
-      toast.success(`Saved ${spec.fileName}`);
-    } else {
-      downloadTextFile(spec.fileName, spec.content);
-      toast.info('No folder connected — downloaded the spec.');
-    }
-  } catch (error) {
-    toast.error((error as Error).message);
-  }
+  toast.success(`${patch.logId || record.logId} updated`);
 }
 </script>
 
 <template>
   <Page :title="$t('autest.bugs.title')" :description="bugStore.sourceName">
     <div class="toolbar">
-      <Segmented v-model:value="portalTab" :options="portalOptions" />
-      <Segmented v-model:value="envTab" :options="envOptions" />
+      <span class="filter-label">{{ $t('autest.bugs.fields.portion') }}</span>
+      <Select
+        v-model:value="portionTab"
+        :options="portionOptions"
+        class="filter"
+      />
+      <span class="filter-label">{{ $t('autest.bugs.fields.env') }}</span>
+      <Select
+        v-model:value="envTab"
+        :options="envFilterOptions"
+        class="filter"
+      />
       <Input
         v-model:value="search"
         :placeholder="$t('autest.general.search')"
@@ -230,85 +179,11 @@ async function generate(record: BugRecord) {
       :data-source="rows"
       :row-key="rowKey"
       :pagination="{ pageSize: 10, showSizeChanger: true }"
-      :scroll="{ x: 1200 }"
+      :scroll="{ x: tableScrollX }"
       size="middle"
     >
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'id'">
-          <Input
-            v-if="isEditing(record as BugRecord)"
-            v-model:value="draft.id"
-            size="small"
-          />
-          <span v-else>{{ record.id }}</span>
-        </template>
-        <template v-else-if="column.key === 'portal'">
-          <Select
-            v-if="isEditing(record as BugRecord)"
-            v-model:value="draft.portal"
-            :options="PORTAL_OPTIONS"
-            size="small"
-            class="cell-edit"
-          />
-          <Tag v-else :color="record.portal === 'external' ? 'blue' : 'purple'">
-            {{ record.portal }}
-          </Tag>
-        </template>
-        <template v-else-if="column.key === 'env'">
-          <Select
-            v-if="isEditing(record as BugRecord)"
-            v-model:value="draft.env"
-            :options="ENV_OPTIONS"
-            size="small"
-            class="cell-edit"
-          />
-          <Tag v-else>{{ String(record.env).toUpperCase() }}</Tag>
-        </template>
-        <template v-else-if="column.key === 'description'">
-          <Input
-            v-if="isEditing(record as BugRecord)"
-            v-model:value="draft.description"
-            size="small"
-          />
-          <span v-else>{{ record.description }}</span>
-        </template>
-        <template v-else-if="column.key === 'status'">
-          <Select
-            v-if="isEditing(record as BugRecord)"
-            v-model:value="draft.status"
-            :options="STATUS_OPTIONS"
-            size="small"
-            class="cell-edit"
-          />
-          <Tag v-else :color="statusColor[record.status]">
-            {{ record.status }}
-          </Tag>
-        </template>
-        <template v-else-if="column.key === 'confidence'">
-          <Select
-            v-if="isEditing(record as BugRecord)"
-            v-model:value="draft.confidence"
-            :options="CONFIDENCE_OPTIONS"
-            size="small"
-            class="cell-edit"
-          />
-          <template v-else>
-            <Tag
-              v-if="record.confidence !== CONFIDENCE.UNKNOWN"
-              :color="record.confidence === CONFIDENCE.HIGH ? 'green' : 'gold'"
-            >
-              {{ record.confidence }}
-            </Tag>
-            <span v-else>-</span>
-          </template>
-        </template>
-        <template v-else-if="column.key === 'pickedUpBy'">
-          <Tag v-if="record.pickedUpBy" color="blue">
-            {{ record.pickedUpBy }}
-          </Tag>
-          <span v-else>-</span>
-        </template>
-        <template v-else-if="column.key === 'actions'">
+        <template v-if="column.key === 'actions'">
           <Space v-if="isEditing(record as BugRecord)">
             <Button
               size="small"
@@ -321,26 +196,47 @@ async function generate(record: BugRecord) {
               {{ $t('autest.general.cancel') }}
             </Button>
           </Space>
-          <Space v-else>
-            <Button size="small" @click="startEdit(record as BugRecord)">
-              {{ $t('autest.bugs.edit') }}
-            </Button>
-            <Button
-              v-if="!record.pickedUpBy"
-              size="small"
-              @click="pickUp(record as BugRecord)"
-            >
-              {{ $t('autest.bugs.pickUp') }}
-            </Button>
-            <Button
-              size="small"
-              type="primary"
-              ghost
-              @click="generate(record as BugRecord)"
-            >
-              {{ $t('autest.bugs.generateTest') }}
-            </Button>
-          </Space>
+          <Button v-else size="small" @click="startEdit(record as BugRecord)">
+            {{ $t('autest.bugs.edit') }}
+          </Button>
+        </template>
+
+        <template v-else-if="isEditing(record as BugRecord)">
+          <Select
+            v-if="isSelect(String(column.key))"
+            v-model:value="draft[String(column.key)]"
+            :options="fieldOptions(String(column.key))"
+            size="small"
+            allow-clear
+            class="cell-edit"
+          />
+          <Input
+            v-else
+            v-model:value="draft[String(column.key)]"
+            size="small"
+          />
+        </template>
+
+        <template v-else-if="column.key === 'status'">
+          <Tag
+            v-if="record.status"
+            :color="statusColor[record.status] ?? 'default'"
+          >
+            {{ record.status }}
+          </Tag>
+          <span v-else>-</span>
+        </template>
+        <template v-else-if="column.key === 'devStatus'">
+          <Tag
+            v-if="record.devStatus"
+            :color="devStatusColor[record.devStatus] ?? 'default'"
+          >
+            {{ record.devStatus }}
+          </Tag>
+          <span v-else>-</span>
+        </template>
+        <template v-else>
+          {{ val(record as BugRecord, String(column.key)) }}
         </template>
       </template>
     </Table>
@@ -357,6 +253,13 @@ async function generate(record: BugRecord) {
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 16px;
+}
+.filter-label {
+  font-weight: 600;
+  color: hsl(var(--foreground) / 0.7);
+}
+.filter {
+  min-width: 140px;
 }
 .spacer {
   flex: 1 1 auto;

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Bug, ColumnMapping, ParsedSheet } from '#/types/domain';
+import type { ColumnMapping, ParsedSheet } from '#/types/domain';
 
 import { computed, reactive, ref } from 'vue';
 
@@ -16,11 +16,7 @@ import {
 
 import { $t } from '#/locales';
 import { useBugStore } from '#/store/bugs';
-import {
-  detectColumn,
-  parseSpreadsheet,
-  rowsToBugs,
-} from '#/utils/spreadsheet';
+import { autoMap, parseSpreadsheet, rowsToBugs } from '#/utils/spreadsheet';
 import { toast } from '#/utils/toast';
 
 const props = defineProps<{ open: boolean }>();
@@ -31,16 +27,22 @@ const visible = computed({
   set: (v) => emit('update:open', v),
 });
 
+// The columns surfaced for manual override; every other column is auto-mapped
+// by header name behind the scenes.
+const PRIMARY_FIELDS = [
+  'logId',
+  'description',
+  'status',
+  'devStatus',
+  'portion',
+  'env',
+  'module',
+];
+
 const bugStore = useBugStore();
 const sheets = ref<ParsedSheet[]>([]);
 const fileName = ref('');
-const mapping = reactive<ColumnMapping>({
-  idCol: '',
-  descCol: '',
-  portalCol: '',
-  envCol: '',
-  useSheetNameAsPortal: false,
-});
+const mapping = reactive<ColumnMapping>({});
 
 const allColumns = computed(() => {
   const set = new Set<string>();
@@ -48,25 +50,25 @@ const allColumns = computed(() => {
   return [...set].map((c) => ({ label: c, value: c }));
 });
 
-const previewBugs = computed<Bug[]>(() => {
-  if (!mapping.descCol) return [];
-  return rowsToBugs(sheets.value, mapping).slice(0, 6);
-});
+const previewBugs = computed(() =>
+  mapping.description
+    ? rowsToBugs(sheets.value, mapping)
+        .slice(0, 6)
+        .map((b, i) => ({ ...b, _key: i }))
+    : [],
+);
 
-const previewColumns = [
-  { title: $t('autest.bugs.id'), dataIndex: 'id', key: 'id' },
-  { title: $t('autest.bugs.portal'), dataIndex: 'portal', key: 'portal' },
-  { title: 'Env', dataIndex: 'env', key: 'env' },
-  {
-    title: $t('autest.bugs.description'),
-    dataIndex: 'description',
-    key: 'description',
-    ellipsis: true,
-  },
-];
+const previewColumns = computed(() =>
+  ['logId', 'portion', 'env', 'description', 'status'].map((key) => ({
+    title: $t(`autest.bugs.fields.${key}`),
+    dataIndex: key,
+    key,
+    ellipsis: key === 'description',
+  })),
+);
 
-function previewKey(record: Bug) {
-  return record.id;
+function previewKey(record: { _key: number }) {
+  return record._key;
 }
 
 async function beforeUpload(file: File) {
@@ -79,11 +81,9 @@ async function beforeUpload(file: File) {
     sheets.value = parsed;
     fileName.value = file.name;
     const cols = parsed.flatMap((s) => s.columns);
-    mapping.idCol = detectColumn(cols, 'id') ?? '';
-    mapping.descCol = detectColumn(cols, 'description') ?? '';
-    mapping.portalCol = detectColumn(cols, 'portal') ?? '';
-    mapping.envCol = detectColumn(cols, 'env') ?? '';
-    mapping.useSheetNameAsPortal = !mapping.portalCol && parsed.length > 1;
+    // Replace the mapping in place so the reactive object stays the same ref.
+    Object.keys(mapping).forEach((k) => delete mapping[k]);
+    Object.assign(mapping, autoMap(cols));
   } catch (error) {
     toast.error((error as Error).message);
   }
@@ -121,29 +121,16 @@ function load() {
 
     <template v-if="sheets.length > 0">
       <div class="muted mb-1 mt-3">{{ $t('autest.import.mapping') }}</div>
+      <div class="hint">{{ $t('autest.import.primaryHint') }}</div>
       <Form layout="vertical">
         <div class="grid">
-          <FormItem :label="$t('autest.import.idColumn')">
+          <FormItem
+            v-for="key in PRIMARY_FIELDS"
+            :key="key"
+            :label="$t(`autest.bugs.fields.${key}`)"
+          >
             <Select
-              v-model:value="mapping.idCol"
-              :options="allColumns"
-              allow-clear
-            />
-          </FormItem>
-          <FormItem :label="$t('autest.import.descriptionColumn')">
-            <Select v-model:value="mapping.descCol" :options="allColumns" />
-          </FormItem>
-          <FormItem :label="$t('autest.import.portalColumn')">
-            <Select
-              v-model:value="mapping.portalCol"
-              :options="allColumns"
-              :disabled="mapping.useSheetNameAsPortal"
-              allow-clear
-            />
-          </FormItem>
-          <FormItem label="Environment column">
-            <Select
-              v-model:value="mapping.envCol"
+              v-model:value="mapping[key]"
               :options="allColumns"
               allow-clear
             />
@@ -157,13 +144,13 @@ function load() {
         :data-source="previewBugs"
         :row-key="previewKey"
         :pagination="false"
+        :scroll="{ x: 720 }"
         size="small"
         class="mt-2"
       >
         <template #bodyCell="{ column, record }">
-          <Tag v-if="column.key === 'portal'">{{ record.portal }}</Tag>
-          <Tag v-else-if="column.key === 'env'">
-            {{ String(record.env).toUpperCase() }}
+          <Tag v-if="column.key === 'status' && record.status">
+            {{ record.status }}
           </Tag>
         </template>
       </Table>
@@ -172,7 +159,7 @@ function load() {
         <Button @click="visible = false">
           {{ $t('autest.general.cancel') }}
         </Button>
-        <Button type="primary" :disabled="!mapping.descCol" @click="load">
+        <Button type="primary" :disabled="!mapping.description" @click="load">
           {{ $t('autest.import.load') }}
         </Button>
       </div>
@@ -189,6 +176,11 @@ function load() {
 .muted {
   color: hsl(var(--foreground) / 0.6);
   font-weight: 600;
+}
+.hint {
+  color: hsl(var(--foreground) / 0.5);
+  font-size: 12px;
+  margin-bottom: 8px;
 }
 .mt-2 {
   margin-top: 8px;

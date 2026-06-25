@@ -1,29 +1,41 @@
-import type {
-  BugStatus,
-  Confidence,
-  Environment,
-  Portal,
-  ReqStatus,
-} from '#/utils/constants';
+import type { ReqStatus } from '#/utils/constants';
 
-/** A single imported/added bug row (raw shape, before it enters the store). */
+/**
+ * A single bug row, mirroring the QA bug sheet column-for-column. Status and
+ * devStatus are constrained in the UI to the sheet's option lists but stored as
+ * free strings so imported data is never lost. `raw` keeps the original row.
+ */
 export interface Bug {
-  id: string;
-  portal: Portal | string;
-  env: Environment | string;
+  no: string;
+  env: string;
+  logId: string;
+  sprint: string;
+  usingMigrationData: string;
+  module: string;
+  portion: string;
+  processFunction: string;
   description: string;
+  status: string;
+  reportedBy: string;
+  dateReported: string;
+  regress: string;
+  defectSeverity: string;
+  defectPriority: string;
+  qaUse: string;
+  readinessAssessment: string;
+  devRemarks: string;
+  targetResolvedDate: string;
+  devStatus: string;
+  defectFixedDate: string;
+  deploymentVersion: string;
+  regressReason: string;
+  resolutionRemarks: string;
   raw?: Record<string, unknown>;
 }
 
-/** A bug as stored (decorated with tracking fields + a stable key). */
+/** A bug as stored (a Bug plus a stable key). */
 export interface BugRecord extends Bug {
   key: string;
-  status: BugStatus;
-  confidence: Confidence;
-  note: string;
-  generatedFile: string;
-  commitHash: string;
-  pickedUpBy: string;
 }
 
 /** A user account (mock auth/data layer, client-side). */
@@ -110,14 +122,8 @@ export interface ParsedSheet {
   rows: Record<string, unknown>[];
 }
 
-/** Column mapping used to turn parsed rows into bugs. */
-export interface ColumnMapping {
-  idCol: string;
-  descCol: string;
-  portalCol?: string;
-  envCol?: string;
-  useSheetNameAsPortal?: boolean;
-}
+/** Column mapping used to turn parsed rows into bugs: bug field key -> column name. */
+export type ColumnMapping = Record<string, string>;
 
 export type BrsKind = 'html' | 'markdown' | 'pdf' | 'text';
 

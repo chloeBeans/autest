@@ -45,6 +45,7 @@ assigned to a sprint. **Dates are placeholders — adjust to your real calendar.
 | R35 | BRS grouped by module; multiple BRS per module, each with an editable updated date | ✅ Done | Sprint 1 | 2026-06-24 |
 | R36 | One requirement tracker + sprints per module; anyone can add/edit/delete | ✅ Done | Sprint 1 | 2026-06-24 |
 | R37 | Per-module members (admin assigns from project members); users see only their modules | ✅ Done | Sprint 1 | 2026-06-24 |
+| R38 | Bug list mirrors the QA bug sheet (24 columns, sheet Status + Dev Status); import auto-maps by header; inline edit all fields. Supersedes the bug-list parts of R2/R3 and removes status-lifecycle/confidence/notes/pick-up (R26) and per-row Generate Test (R6/R7) | ✅ Done | Sprint 1 | 2026-06-25 |
 | R15 | Real backend: execute `npx playwright test`, stream results | 🔜 Planned | Sprint 2 | — |
 | R16 | Real git commit of confident fixes | 🔜 Planned | Sprint 2 | — |
 | R17 | Persist folder handles across reloads (IndexedDB) | 🔜 Planned | Sprint 2 | — |

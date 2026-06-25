@@ -1,0 +1,18 @@
+No,ENV,"Log ID
+
+S2-S1UAT-xxx",Sprint,USING MIGRATION DATA,Modules,Portion,Process/Function,Issue Description,"Status
+OPEN
+RETEST
+CLOSED
+REOPEN
+INVALID",Reported By,"Date Reported
+",REGRESS,Defect Severity,Defect Priority,*QA use**,Readiness Assessment,,DEV Remarks to Tester,Target Resolved Date,"Dev Status
+IN PROGRESS
+FIXED IN LOCAL ENV
+DEPLOYED to PRE-SIT 
+",Defect Fixed Date,Deployment Version,REGRESS REASON/COMMENTS,Resolution Remarks
+675,,S2-PRE-SIT-675,S2,,CON,Ext Portal,Contribution ,"Contribution Label Refinement - To change the submission validation tab label  ""Valid/Invalid Employee"" to
+Monthly Contribution  - ""Valid/Invalid Contribution""
+Arrears Contribution -  ""Valid/Invalid Arrears""
+GS Contribution - ""Valid/Invalid Government Share""
+",OPEN,KahMeon,22/06/2026,,,,,,,pending pre-sit deployment 24-6-2026,24/6/2026,FIXED IN LOCAL ENV,,,,

@@ -1,1 +1,78 @@
-https://docs.google.com/spreadsheets/d/1cz6ifXgjRX4Rh0WgvcJij-GDkhvBIs2J-Kd3FQhrUlg/edit?gid=0#gid=0
+The AI bug-fixing flow is basically:
+Bugzilla / Jira ticket
+        ↓
+Trigger
+        ↓
+Backend creates job
+        ↓
+Worker runs AI agent
+        ↓
+Agent fixes code in repo
+        ↓
+Tests run
+        ↓
+Draft PR created
+        ↓
+Human reviews
+The agent does not get triggered directly by Codex/Claude. Your own system triggers it.
+Best trigger options:
+Manual button in your internal portal
+or
+Add label/tag: ai-fix
+or later:
+Automatically run for selected OPEN / REOPEN bugs
+Recommended MVP:
+Bugzilla ticket
+        ↓
+You click "Run AI Fix"
+        ↓
+FastAPI creates ai_bugfix_job
+        ↓
+Worker picks the job
+        ↓
+Worker fetches ticket details
+        ↓
+Worker maps ticket module to repo
+        ↓
+Worker clones repo
+        ↓
+Worker creates branch
+        ↓
+Claude Code / Codex attempts fix
+        ↓
+Worker runs tests
+        ↓
+Worker checks diff
+        ↓
+Draft PR created
+        ↓
+Bugzilla comment + Slack notification
+Important safety rules:
+Do not auto-merge
+Do not auto-deploy
+Always create draft PR first
+Human must review before merge
+The main components:
+
+Component
+Purpose
+FastAPI webhook/admin API
+Receives trigger and creates job
+Postgres / Redis queue
+Stores queued bug-fix jobs
+Worker container
+Runs the AI coding task
+Claude Code / Codex
+Makes code changes
+GitHub/GitLab API
+Creates branch and PR
+Bugzilla/Jira API
+Reads ticket and comments result
+Slack/email
+Sends notification
+The safest starting point:
+Manual "Run AI Fix" button → Draft PR only
+Then later improve to:
+Ticket has ai-fix tag → Auto-run agent → Draft PR
+
+

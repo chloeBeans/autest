@@ -238,20 +238,22 @@ const getForceMount = computed(() => {
             decorative
             orientation="vertical"
           />
-          <SheetTitle v-if="title" class="text-left">
-            <slot name="title">
-              {{ title }}
+          <div class="flex flex-col">
+            <SheetTitle v-if="title" class="text-left">
+              <slot name="title">
+                {{ title }}
 
-              <VbenHelpTooltip v-if="titleTooltip" trigger-class="pb-1">
-                {{ titleTooltip }}
-              </VbenHelpTooltip>
-            </slot>
-          </SheetTitle>
-          <SheetDescription v-if="description" class="mt-1 text-xs">
-            <slot name="description">
-              {{ description }}
-            </slot>
-          </SheetDescription>
+                <VbenHelpTooltip v-if="titleTooltip" trigger-class="pb-1">
+                  {{ titleTooltip }}
+                </VbenHelpTooltip>
+              </slot>
+            </SheetTitle>
+            <SheetDescription v-if="description" class="mt-1 text-xs">
+              <slot name="description">
+                {{ description }}
+              </slot>
+            </SheetDescription>
+          </div>
         </div>
 
         <VisuallyHidden v-if="!title || !description">

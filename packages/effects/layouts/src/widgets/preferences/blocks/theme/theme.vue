@@ -51,33 +51,39 @@ function nameView(name: string) {
 </script>
 
 <template>
-  <div class="flex w-full flex-wrap justify-between">
-    <template v-for="theme in THEME_PRESET" :key="theme.name">
-      <div
-        class="flex cursor-pointer flex-col"
-        @click="modelValue = theme.name"
-      >
+  <div class="flex w-full flex-col">
+    <div class="grid grid-cols-3 gap-3">
+      <template v-for="theme in THEME_PRESET" :key="theme.name">
         <div
-          :class="activeClass(theme.name)"
-          class="outline-box flex-center py-4"
+          class="flex cursor-pointer flex-col gap-2"
+          @click="modelValue = theme.name"
         >
-          <component :is="theme.icon" class="mx-9 size-5" />
+          <div
+            :class="activeClass(theme.name)"
+            class="outline-box flex-center py-4"
+          >
+            <component :is="theme.icon" class="size-5" />
+          </div>
+          <div class="text-muted-foreground text-center text-xs">
+            {{ nameView(theme.name) }}
+          </div>
         </div>
-        <div class="text-muted-foreground mt-2 text-center text-xs">
-          {{ nameView(theme.name) }}
-        </div>
-      </div>
-    </template>
+      </template>
+    </div>
 
-    <SwitchItem
-      v-model="themeSemiDarkSidebar"
-      :disabled="modelValue === 'dark'"
-      class="mt-6"
-    >
-      {{ $t('preferences.theme.darkSidebar') }}
-    </SwitchItem>
-    <SwitchItem v-model="themeSemiDarkHeader" :disabled="modelValue === 'dark'">
-      {{ $t('preferences.theme.darkHeader') }}
-    </SwitchItem>
+    <div class="mt-3">
+      <SwitchItem
+        v-model="themeSemiDarkSidebar"
+        :disabled="modelValue === 'dark'"
+      >
+        {{ $t('preferences.theme.darkSidebar') }}
+      </SwitchItem>
+      <SwitchItem
+        v-model="themeSemiDarkHeader"
+        :disabled="modelValue === 'dark'"
+      >
+        {{ $t('preferences.theme.darkHeader') }}
+      </SwitchItem>
+    </div>
   </div>
 </template>

@@ -16,7 +16,7 @@ import type { SegmentedItem } from '@vben-core/shadcn-ui';
 
 import { computed, ref } from 'vue';
 
-import { Copy, Pin, PinOff, RotateCw } from '@vben/icons';
+import { Pin, PinOff, RotateCw } from '@vben/icons';
 import { $t, loadLocaleMessages } from '@vben/locales';
 import {
   clearCache,
@@ -31,10 +31,9 @@ import {
   VbenIconButton,
   VbenSegmented,
 } from '@vben-core/shadcn-ui';
-import { globalShareState } from '@vben-core/shared/global-state';
 
-import { useClipboard } from '@vueuse/core';
-
+// import { globalShareState } from '@vben-core/shared/global-state';
+// import { useClipboard } from '@vueuse/core';
 import {
   Animation,
   Block,
@@ -59,7 +58,7 @@ import {
 
 const emit = defineEmits<{ clearPreferencesAndLogout: [] }>();
 
-const message = globalShareState.getMessage();
+// const message = globalShareState.getMessage();
 
 const appLocale = defineModel<SupportedLanguagesType>('appLocale');
 const appDynamicTitle = defineModel<boolean>('appDynamicTitle');
@@ -182,7 +181,7 @@ const {
   isSideMode,
   isSideNav,
 } = usePreferences();
-const { copy } = useClipboard({ legacy: true });
+// const { copy } = useClipboard({ legacy: true });
 
 const [Drawer] = useVbenDrawer();
 
@@ -218,14 +217,14 @@ const showBreadcrumbConfig = computed(() => {
   );
 });
 
-async function handleCopy() {
-  await copy(JSON.stringify(diffPreference.value, null, 2));
-
-  message.copyPreferencesSuccess?.(
-    $t('preferences.copyPreferencesSuccessTitle'),
-    $t('preferences.copyPreferencesSuccess'),
-  );
-}
+// async function handleCopy() {
+//   await copy(JSON.stringify(diffPreference.value, null, 2));
+//
+//   message.copyPreferencesSuccess?.(
+//     $t('preferences.copyPreferencesSuccessTitle'),
+//     $t('preferences.copyPreferencesSuccess'),
+//   );
+// }
 
 async function handleClearCache() {
   resetPreferences();
@@ -246,6 +245,7 @@ async function handleReset() {
   <div>
     <Drawer
       :description="$t('preferences.subtitle')"
+      :footer="false"
       :title="$t('preferences.title')"
       class="!border-0 sm:max-w-sm"
     >
@@ -285,10 +285,11 @@ async function handleReset() {
         </div>
       </template>
 
-      <div>
+      <div class="preferences-content">
         <VbenSegmented
           v-model="activeTab"
           :tabs="tabs"
+          class="preferences-tabs"
           :class="{
             'sticky-tabs-header': appEnableStickyPreferencesNavigationBar,
           }"
@@ -462,7 +463,7 @@ async function handleReset() {
       </div>
 
       <template #footer>
-        <VbenButton
+        <!-- <VbenButton
           :disabled="!diffPreference"
           class="mx-4 w-full"
           size="sm"
@@ -471,7 +472,7 @@ async function handleReset() {
         >
           <Copy class="mr-2 size-3" />
           {{ $t('preferences.copyPreferences') }}
-        </VbenButton>
+        </VbenButton> -->
         <VbenButton
           :disabled="!diffPreference"
           class="mr-4 w-full"
@@ -487,6 +488,28 @@ async function handleReset() {
 </template>
 
 <style scoped>
+/* Give the segmented tab bar a softer, more modern container and breathing
+   room before the settings cards. Box-model dimensions are left untouched so
+   the animated active indicator stays aligned. */
+.preferences-tabs :deep([role='tablist']) {
+  margin-bottom: 0.5rem;
+  border-radius: 0.625rem;
+}
+
+.preferences-tabs :deep([role='tabpanel']) {
+  margin-top: 0.875rem;
+}
+
+/* The active tab is colored with `text-primary` upstream, which washes out to
+   near-invisible on the light indicator pill when the selected theme uses a
+   light primary color (e.g. yellow/sky-blue) in light mode. Pin the active and
+   hovered labels to the always-contrasting foreground token so they stay
+   readable in every theme and in both light and dark modes. */
+.preferences-tabs :deep([role='tab'][data-state='active']),
+.preferences-tabs :deep([role='tab']:hover) {
+  color: hsl(var(--foreground));
+}
+
 :deep(.sticky-tabs-header [role='tablist']) {
   position: sticky;
   top: -12px;

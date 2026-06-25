@@ -20,10 +20,10 @@ const modelValue = defineModel<string>();
     :class="{
       'pointer-events-none opacity-50': disabled,
     }"
-    class="hover:bg-accent flex w-full items-center justify-between rounded-md px-2 py-2"
+    class="hover:bg-accent/60 my-0.5 flex w-full items-center justify-between gap-3 rounded-lg px-2.5 py-2 transition-colors"
     disabled
   >
-    <span class="text-sm">
+    <span class="text-foreground/90 min-w-0 flex-1 text-sm leading-snug">
       <slot></slot>
     </span>
     <ToggleGroup

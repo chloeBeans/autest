@@ -122,23 +122,26 @@ watch(
 </script>
 
 <template>
-  <div class="flex w-full flex-wrap justify-between">
+  <div class="grid w-full grid-cols-4 gap-x-2 gap-y-3">
     <template v-for="theme in builtinThemePresets" :key="theme.type">
-      <div class="flex cursor-pointer flex-col" @click="handleSelect(theme)">
+      <div
+        class="flex cursor-pointer flex-col gap-1.5"
+        @click="handleSelect(theme)"
+      >
         <div
           :class="{
             'outline-box-active': theme.type === modelValue,
           }"
-          class="outline-box flex-center group cursor-pointer"
+          class="outline-box flex-center group h-11 cursor-pointer"
         >
           <template v-if="theme.type !== 'custom'">
             <div
               :style="{ backgroundColor: theme.color }"
-              class="mx-9 my-2 size-5 rounded-md"
+              class="size-5 rounded-md"
             ></div>
           </template>
           <template v-else>
-            <div class="size-full px-9 py-2" @click.stop="selectColor">
+            <div class="flex-center size-full" @click.stop="selectColor">
               <div class="flex-center relative size-5 rounded-sm">
                 <UserRoundPen
                   class="z-1 absolute size-5 opacity-60 group-hover:opacity-100"
@@ -154,7 +157,7 @@ watch(
             </div>
           </template>
         </div>
-        <div class="text-muted-foreground my-2 text-center text-xs">
+        <div class="text-muted-foreground text-center text-xs leading-tight">
           {{ typeView(theme.type) }}
         </div>
       </div>

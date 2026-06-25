@@ -36,12 +36,14 @@ const slots = useSlots();
 <template>
   <div
     :class="{
-      'hover:bg-accent': !slots.tip,
+      'hover:bg-accent/60': !slots.tip,
       'pointer-events-none opacity-50': disabled,
     }"
-    class="my-1 flex w-full items-center justify-between rounded-md px-2 py-1"
+    class="my-0.5 flex w-full items-center justify-between gap-3 rounded-lg px-2.5 py-1.5 transition-colors"
   >
-    <span class="flex items-center text-sm">
+    <span
+      class="text-foreground/90 flex min-w-0 flex-1 items-center text-sm leading-snug"
+    >
       <slot></slot>
 
       <VbenTooltip v-if="slots.tip" side="bottom">

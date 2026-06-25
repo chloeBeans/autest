@@ -560,7 +560,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
               class="my-0 mr-1 rounded-md"
               @click="handleHeaderToggle"
             >
-              <IconifyIcon v-if="showSidebar" icon="ep:fold" />
+              <IconifyIcon v-if="!sidebarCollapse" icon="ep:fold" />
               <IconifyIcon v-else icon="ep:expand" />
             </VbenIconButton>
           </template>

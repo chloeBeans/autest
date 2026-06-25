@@ -143,7 +143,7 @@ function wrapperMenus(menus: MenuRecordRaw[], deep: boolean = true) {
 function toggleSidebar() {
   updatePreferences({
     sidebar: {
-      hidden: !preferences.sidebar.hidden,
+      collapsed: !preferences.sidebar.collapsed,
     },
   });
 }

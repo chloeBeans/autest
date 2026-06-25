@@ -46,7 +46,7 @@
     "savePortal": "Simpan ke dalam portal",
     "saveToFolder": "Simpan ke folder",
     "notConnected": "Folder tidak disambung — simpanan akan dimuat turun. Sambung dalam Tetapan.",
-    "selector": "Selector",
+    "selector": "Pemilih",
     "stepValue": "Nilai"
   },
   "record": {
@@ -115,7 +115,7 @@
     "generateTest": "Jana test",
     "addBug": "Tambah bug",
     "pickUp": "Ambil",
-    "edit": "Edit"
+    "edit": "Sunting"
   },
   "folders": {
     "title": "Folder Portal",

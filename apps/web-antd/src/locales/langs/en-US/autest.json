@@ -9,6 +9,8 @@
     "tests": "Tests",
     "brs": "BRS",
     "settings": "Setup",
+    "admin": "Admin",
+    "management": "Management",
     "import": "Import"
   },
   "auth": {
@@ -22,19 +24,22 @@
     "preferences": "Preferences",
     "language": "Language",
     "backend": "Backend",
-    "projects": "Projects (admin)",
+    "projects": "Projects",
     "project": "Project",
     "members": "Members",
     "newProject": "New project name",
-    "users": "Users (admin)",
-    "membership": "Project membership (admin)",
+    "users": "Users",
+    "membership": "Project membership",
     "addMember": "Add member",
     "assign": "Assign",
-    "modules": "Modules (admin)",
+    "modules": "Modules",
     "newModule": "New module name",
     "removeModule": "Remove this module?",
-    "moduleMembership": "Module members (admin)",
+    "moduleMembership": "Module members",
     "selectModuleHint": "Select a module to manage its members."
+  },
+  "management": {
+    "title": "Management"
   },
   "tests": {
     "title": "Tests",
@@ -150,7 +155,7 @@
     "module": "Module",
     "members": "members",
     "noModules": "No modules available",
-    "noModulesHint": "An admin can create modules in Setup.",
+    "noModulesHint": "An admin can create modules in Management.",
     "noActiveModule": "No active module — ask an admin to add you to one.",
     "documents": "Documents",
     "upload": "Upload BRS",

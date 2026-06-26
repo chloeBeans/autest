@@ -6,7 +6,7 @@
 slot — top-left, directly below the app name) ·
 **Login auto-select:** `apps/web-antd/src/store/auth.ts` calls
 `projectStore.ensureValidSelection()` after `setUserInfo` in `authLogin` + `fetchUserInfo` ·
-**Admin UI:** `apps/web-antd/src/views/autest/setup/index.vue`
+**Admin UI:** `apps/web-antd/src/views/autest/management/index.vue`
 
 ## Purpose
 Everything (bugs, tests, BRS, portal folders) is scoped to a project. Users work
@@ -26,7 +26,7 @@ inside the projects they're assigned to; admins manage projects and membership.
 Each project is further split into **modules** (admin-managed). BRS documents and
 the requirement tracker are scoped to a module, and modules have their own member
 list (a subset of the project's members). See [brs.md](brs.md) and
-[settings.md](settings.md). Store: `apps/web-antd/src/store/modules.ts`.
+[management.md](management.md). Store: `apps/web-antd/src/store/modules.ts`.
 
 ## Data model
 `project = { id, name, createdBy, members: [username] }`; `currentProjectId`

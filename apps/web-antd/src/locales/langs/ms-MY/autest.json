@@ -9,6 +9,8 @@
     "tests": "Test",
     "brs": "BRS",
     "settings": "Tetapan",
+    "admin": "Pentadbiran",
+    "management": "Pengurusan",
     "import": "Import"
   },
   "auth": {
@@ -22,19 +24,22 @@
     "preferences": "Keutamaan",
     "language": "Bahasa",
     "backend": "Backend",
-    "projects": "Projek (admin)",
+    "projects": "Projek",
     "project": "Projek",
     "members": "Ahli",
     "newProject": "Nama projek baharu",
-    "users": "Pengguna (admin)",
-    "membership": "Keahlian projek (admin)",
+    "users": "Pengguna",
+    "membership": "Keahlian projek",
     "addMember": "Tambah ahli",
     "assign": "Tugaskan",
-    "modules": "Modul (admin)",
+    "modules": "Modul",
     "newModule": "Nama modul baharu",
     "removeModule": "Buang modul ini?",
-    "moduleMembership": "Ahli modul (admin)",
+    "moduleMembership": "Ahli modul",
     "selectModuleHint": "Pilih modul untuk menguruskan ahlinya."
+  },
+  "management": {
+    "title": "Pengurusan"
   },
   "tests": {
     "title": "Test",
@@ -150,7 +155,7 @@
     "module": "Modul",
     "members": "ahli",
     "noModules": "Tiada modul tersedia",
-    "noModulesHint": "Admin boleh mencipta modul dalam Tetapan.",
+    "noModulesHint": "Admin boleh mencipta modul dalam Pengurusan.",
     "noActiveModule": "Tiada modul aktif — minta admin menambah anda ke satu.",
     "documents": "Dokumen",
     "upload": "Muat Naik BRS",

@@ -56,6 +56,32 @@ const routes: RouteRecordRaw[] = [
       title: $t('autest.nav.settings'),
     },
   },
+  {
+    name: 'AutestAdmin',
+    path: '/autest/admin',
+    meta: {
+      // Admin-only group. Sits below the project-scoped views as its own
+      // collapsible section so org-wide admin doesn't read as "part of the
+      // current project". The authority gate hides the whole group (and its
+      // children) from non-admins — mirrors the Extra group's structure.
+      authority: ['admin', 'super'],
+      icon: 'lucide:shield',
+      order: 5,
+      title: $t('autest.nav.admin'),
+    },
+    children: [
+      {
+        name: 'AutestManagement',
+        path: '/autest/management',
+        component: () => import('#/views/autest/management/index.vue'),
+        meta: {
+          authority: ['admin', 'super'],
+          icon: 'lucide:sliders-horizontal',
+          title: $t('autest.nav.management'),
+        },
+      },
+    ],
+  },
 ];
 
 export default routes;

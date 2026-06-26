@@ -11,7 +11,8 @@ sprint it belongs to. **Update the relevant file whenever its module changes.**
 | Generate test (analyze / commit / notes) | [modules/generate-test.md](modules/generate-test.md) |
 | Tests (record / drag-drop / code) | [modules/tests.md](modules/tests.md) |
 | BRS | [modules/brs.md](modules/brs.md) |
-| Settings (+ admin area) | [modules/settings.md](modules/settings.md) |
+| Settings (portal folders) | [modules/settings.md](modules/settings.md) |
+| Management (admin only) | [modules/management.md](modules/management.md) |
 | Mock backend | [modules/mock-backend.md](modules/mock-backend.md) |
 | Shared UI | [modules/shared-ui.md](modules/shared-ui.md) |
 

@@ -5,14 +5,14 @@
 
 ## Purpose
 A project is split into **modules** (admin-managed — see
-[settings.md](settings.md)). Each module groups **multiple BRS documents** and
+[management.md](management.md)). Each module groups **multiple BRS documents** and
 owns **one shared requirement tracker** (items) + sprints. Upload BRS by module,
 auto-list each one's requirements into the module tracker, and track them by
 sprint.
 
 ## Requirements
 - ✅ **Modules per project**: pick a module via the selector; admins manage the
-  list in Setup (Sprint 1)
+  list in Management (Sprint 1)
 - ✅ **Multiple BRS per module**: add many, switch via a selector, delete (Sprint 1)
 - ✅ Each module has ONE requirement tracker + sprints, shared across its BRS (Sprint 1)
 - ✅ **Updated date** per BRS — the uploader picks/edits it after upload (Sprint 1)
@@ -30,7 +30,7 @@ sprint.
 ## Visibility
 - Admins see every module in the current project.
 - Non-admins see only modules they're a member of (module members are a subset
-  of the project's members — see [settings.md](settings.md)).
+  of the project's members — see [management.md](management.md)).
 
 ## Notes
 - Extraction heuristic (`extractRequirements`) picks bullet/numbered lines, lines
